@@ -1,474 +1,2570 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pakka Indian Kitchen — Restaurant Dashboard</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=DM+Mono:wght@400;500&display=swap');
-*{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --beige:#F5F0E8;--beige2:#EDE8DE;--beige3:#E0D8C8;
-  --panel:#FFFDF8;--panel2:#F7F2EA;
-  --green:#00664C;--green2:#005240;--gl:#E8F3EF;
-  --orange:#F37829;--ol:#FEF0E6;
-  --gold:#B8984B;--goldl:#F5EFD8;
-  --red:#b83232;--rl:#FEE8E8;
-  --ink:#1a1a1a;--ink2:#444;--ink3:#777;--ink4:#aaa;
-  --bd:#D4CBBA;--bd2:#BEB5A2;
-  --r:10px;--rlg:14px;
-}
-body{font-family:'Cairo',sans-serif;background:var(--beige);color:var(--ink);font-size:15px;line-height:1.5;min-height:100vh}
-/* LOGIN */
-.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--beige)}
-.login-card{background:var(--panel);border:1px solid var(--bd);border-radius:var(--rlg);padding:40px 44px;width:420px;box-shadow:0 4px 20px rgba(0,0,0,.08)}
-.lbl{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);margin-bottom:6px}
-.linp{width:100%;padding:11px 14px;border:1.5px solid var(--bd);border-radius:var(--r);font-size:14px;font-family:'Cairo',sans-serif;background:var(--beige2);color:var(--ink);margin-bottom:4px;transition:all .15s;outline:none}
-.linp:focus{border-color:var(--green);background:var(--panel)}
-.linp::placeholder{color:var(--ink4)}
-.linp-hint{font-size:11px;color:var(--ink4);margin-bottom:16px;line-height:1.6}
-.lbtn{width:100%;padding:13px;border-radius:var(--r);font-size:13px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;border:none;background:var(--green);color:#fff;font-family:'Cairo',sans-serif;transition:all .15s}
-.lbtn:hover{background:var(--green2)}
-.lbtn:disabled{opacity:.55;cursor:not-allowed}
-.lerr{font-size:12px;color:var(--red);margin-top:10px;min-height:16px;text-align:center}
-/* TOPBAR */
-.topbar{display:flex;align-items:stretch;background:var(--green);border-bottom:3px solid var(--green2);position:sticky;top:0;z-index:20}
-.tb-brand{padding:8px 18px;display:flex;align-items:center;gap:10px;border-right:1px solid rgba(255,255,255,.15);flex-shrink:0}
-.bsub div:first-child{font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.5)}
-.bsub div:last-child{font-size:8px;color:rgba(255,255,255,.3);font-style:italic}
-.ntabs{display:flex;align-items:stretch;flex:1;overflow-x:auto}
-.ntab{padding:0 20px;font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;border:none;background:none;color:rgba(255,255,255,.5);border-bottom:3px solid transparent;transition:all .2s;white-space:nowrap;display:flex;align-items:center;gap:7px;font-family:'Cairo',sans-serif;margin-bottom:-3px}
-.ntab:hover{color:rgba(255,255,255,.85);background:rgba(255,255,255,.06)}
-.ntab.active{color:#fff;border-bottom-color:rgba(255,255,255,.9)}
-.ntab .dot{width:6px;height:6px;border-radius:50%;background:var(--orange);display:none}
-.ntab.has-data .dot{display:block}
-.tbr{padding:0 14px;display:flex;align-items:center;gap:10px;border-left:1px solid rgba(255,255,255,.15);flex-shrink:0}
-.sdot{width:7px;height:7px;border-radius:50%;background:#6ee7b7;animation:pulse 2s infinite;flex-shrink:0}
-.sdot.off{background:#f87171;animation:none}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-.rbadge{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 9px;border-radius:4px;background:rgba(255,255,255,.15);color:#fff;white-space:nowrap}
-.logoutbtn{font-size:10px;font-weight:700;cursor:pointer;border:1px solid rgba(255,255,255,.3);background:transparent;color:rgba(255,255,255,.7);padding:4px 10px;border-radius:5px;font-family:'Cairo',sans-serif}
-.logoutbtn:hover{background:rgba(255,255,255,.1);color:#fff}
-/* CONTENT */
-.ct{padding:20px;background:var(--beige)}
-.card{background:var(--panel);border:1px solid var(--bd);border-radius:var(--rlg);padding:20px 22px;margin-bottom:14px;box-shadow:0 1px 4px rgba(0,0,0,.04)}
-.ch{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
-.ctitle{font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3)}
-.acc{width:4px;height:16px;border-radius:2px;background:var(--green);margin-right:10px;flex-shrink:0}
-.tr{display:flex;align-items:center}
-.fl{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--ink3);margin-bottom:6px}
-.inp{width:100%;padding:11px 14px;border:1.5px solid var(--bd);border-radius:var(--r);font-size:15px;font-family:'Cairo',sans-serif;background:var(--beige2);color:var(--ink);transition:all .15s}
-.inp:focus{outline:none;border-color:var(--green);background:var(--panel)}
-.inp::placeholder{color:var(--ink4)}
-.inp:disabled{opacity:.55;cursor:not-allowed;background:var(--beige3)}
-.inpr{text-align:right;font-family:'DM Mono',monospace}
-select.inp{cursor:pointer}
-textarea.inp{resize:vertical;min-height:70px}
-.btn{padding:10px 18px;border-radius:var(--r);font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;border:1.5px solid var(--bd2);background:var(--panel2);color:var(--ink2);transition:all .15s;font-family:'Cairo',sans-serif}
-.btn:hover:not(:disabled){border-color:var(--green);color:var(--green);background:var(--gl)}
-.btn:disabled{opacity:.4;cursor:not-allowed}
-.btng{background:var(--green);color:#fff;border-color:var(--green)}
-.btng:hover:not(:disabled){background:var(--green2);color:#fff}
-.btnsm{padding:6px 12px;font-size:11px}
-.btno{border-color:transparent;background:transparent;color:var(--ink3)}
-.btno:hover:not(:disabled){background:var(--beige2);color:var(--ink2)}
-.btndel{border-color:transparent;background:transparent;color:var(--red);opacity:.7}
-.btndel:hover{background:var(--rl);color:var(--red);opacity:1}
-.sok{display:none;font-size:11px;color:var(--green);font-weight:700}
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
-.badge{display:inline-flex;align-items:center;font-size:11px;font-weight:700;padding:4px 10px;border-radius:5px;white-space:nowrap;font-family:'DM Mono',monospace}
-.bg{background:var(--gl);color:var(--green);border:1px solid rgba(0,102,76,.2)}
-.br{background:var(--rl);color:var(--red);border:1px solid rgba(184,50,50,.2)}
-.bo{background:var(--ol);color:var(--orange);border:1px solid rgba(243,120,41,.2)}
-.bgold{background:var(--goldl);color:var(--gold);border:1px solid rgba(184,152,75,.25)}
-.bdim{background:var(--beige2);color:var(--ink3);border:1px solid var(--bd)}
-.tag{display:inline-block;font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;letter-spacing:.04em;text-transform:uppercase;font-family:'DM Mono',monospace}
-.tp{background:var(--gl);color:var(--green)}.ts{background:var(--goldl);color:var(--gold)}
-.wc{border-radius:var(--rlg);padding:20px 22px;border:1.5px solid}
-.wg{background:var(--gl);border-color:rgba(0,102,76,.3);color:var(--green)}
-.wr{background:var(--rl);border-color:rgba(184,50,50,.25);color:var(--red)}
-.wgold{background:var(--goldl);border-color:rgba(184,152,75,.3);color:var(--gold)}
-.wb{background:var(--beige2);border-color:var(--bd2);color:var(--ink2)}
-.wc .wl{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;opacity:.7}
-.wc .wv{font-size:24px;font-weight:800;line-height:1.1}
-.wc .ws{font-size:11px;margin-top:6px;opacity:.65;font-family:'DM Mono',monospace}
-.pb{height:6px;background:var(--beige3);border-radius:3px;overflow:hidden;margin-top:10px}
-.pf{height:100%;border-radius:3px;transition:width .4s}
-.nh{background:var(--gl);border:1.5px solid rgba(0,102,76,.18);border-radius:var(--r);padding:12px 16px;margin:8px 0}
-.pfbox{border:1.5px solid rgba(0,102,76,.2);border-radius:var(--r);padding:14px 18px;background:var(--panel);margin-top:6px}
-.wfr{display:grid;grid-template-columns:165px 1fr 55px;align-items:center;gap:10px;margin:5px 0}
-.wfl{font-size:13px;color:var(--ink2);font-weight:600}
-.wft{height:22px;background:var(--beige3);border-radius:3px;overflow:hidden;border:1px solid var(--bd)}
-.wff{height:100%;border-radius:3px;display:flex;align-items:center;padding-left:8px;font-size:10px;font-weight:700;font-family:'DM Mono',monospace;transition:width .5s}
-.wfp{font-size:11px;color:var(--ink3);text-align:right;font-family:'DM Mono',monospace}
-.mr{display:grid;grid-template-columns:1fr 92px 120px 85px;gap:12px;align-items:center;padding:13px 0;border-bottom:1px solid var(--bd)}
-.mr:last-child{border-bottom:none}
-.mhdr{display:grid;grid-template-columns:1fr 92px 120px 85px;gap:12px;padding:8px 0 10px;font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink4);border-bottom:1.5px solid var(--bd2)}
-.ml{font-size:15px;font-weight:600;color:var(--ink)}.ms{font-size:12px;color:var(--ink3);margin-top:2px}
-.mono{font-family:'DM Mono',monospace;text-align:right;font-size:14px;color:var(--ink2)}
-.sdiv{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink4);padding:12px 0 5px;border-bottom:1.5px solid var(--bd2)}
-.fr{display:grid;grid-template-columns:1fr 160px 70px;gap:12px;align-items:center;padding:13px 0;border-bottom:1px solid var(--bd)}
-.fr:last-child{border-bottom:none}
-.fhdr{display:grid;grid-template-columns:1fr 160px 70px;gap:12px;padding:8px 0 10px;font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink4);border-bottom:1.5px solid var(--bd2)}
-.optbl{width:100%;border-collapse:collapse;font-size:13px}
-.optbl th{text-align:left;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink4);padding:9px 10px;border-bottom:1.5px solid var(--bd2)}
-.optbl th.r,.optbl td.r{text-align:right}
-.optbl td{padding:11px 10px;border-bottom:1px solid var(--bd);color:var(--ink);vertical-align:middle}
-.optbl tr:last-child td{border-bottom:none}
-.optbl tr.rn td{background:var(--gl);font-weight:700}
-.optbl tr.rt td{background:var(--beige2);font-weight:700;border-top:1.5px solid var(--bd2)}
-.optbl tr.rp td{font-weight:700}
-.optbl tr:hover:not(.rn):not(.rt) td{background:var(--beige2)}
-.mpill{padding:7px 16px;border-radius:99px;font-size:11px;font-weight:700;cursor:pointer;border:1.5px solid var(--bd2);background:var(--panel);color:var(--ink3);transition:all .15s;white-space:nowrap;font-family:'Cairo',sans-serif}
-.mpill:hover{border-color:var(--green);color:var(--green)}
-.mpill.active{background:var(--green);color:#fff;border-color:var(--green)}
-.stabs{display:flex;gap:4px;margin-bottom:18px;background:var(--panel);border:1.5px solid var(--bd);border-radius:var(--r);padding:4px}
-.stab{padding:8px 18px;border-radius:7px;font-size:11px;font-weight:700;cursor:pointer;border:none;background:none;color:var(--ink3);transition:all .15s;font-family:'Cairo',sans-serif}
-.stab:hover{color:var(--green)}.stab.active{background:var(--green);color:#fff}
-.kpi{background:var(--panel);border:1.5px solid var(--bd);border-radius:var(--rlg);padding:16px 18px;position:relative;overflow:hidden}
-.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--green)}
-.kl{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink4);margin-bottom:8px}
-.kv{font-size:20px;font-weight:800;color:var(--ink);line-height:1}
-.ks{font-size:12px;color:var(--ink3);margin-top:4px;font-family:'DM Mono',monospace}
-.htbl{width:100%;border-collapse:collapse;font-size:13px}
-.htbl th{text-align:left;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink4);padding:8px 10px;border-bottom:1.5px solid var(--bd2)}
-.htbl th.r,.htbl td.r{text-align:right}
-.htbl td{padding:11px 10px;border-bottom:1px solid var(--bd);color:var(--ink);vertical-align:middle}
-.htbl tr:last-child td{border-bottom:none}.htbl tr:hover td{background:var(--beige2)}
-.oscroll{overflow-x:auto}
-.otbl{width:100%;border-collapse:collapse;font-size:12px;min-width:500px}
-.otbl th{padding:10px 12px;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink4);border-bottom:1.5px solid var(--bd2);background:var(--panel2);text-align:right;white-space:nowrap}
-.otbl th.lh{text-align:left;min-width:180px;position:sticky;left:0;background:var(--panel2);z-index:3;border-right:1.5px solid var(--bd2)}
-.otbl td{padding:9px 12px;border-bottom:1px solid var(--bd);text-align:right;font-family:'DM Mono',monospace;font-size:11px;white-space:nowrap;background:var(--panel)}
-.otbl td.lc{text-align:left;font-family:'Cairo',sans-serif;font-size:12px;position:sticky;left:0;background:var(--panel);z-index:2;border-right:1.5px solid var(--bd2)}
-.otbl tr:hover td,.otbl tr:hover td.lc{background:var(--beige2)}
-.otbl tr.rn td,.otbl tr.rn td.lc{background:var(--gl);font-weight:700}
-.otbl tr.rt td,.otbl tr.rt td.lc{background:var(--panel2);font-weight:700;border-top:1.5px solid var(--bd2)}
-.otbl tr.rp td,.otbl tr.rp td.lc{font-weight:700;border-top:1.5px solid var(--bd2)}
-.otbl tr.rperf td,.otbl tr.rperf td.lc{background:var(--beige3);border-top:2px solid var(--bd2);border-bottom:2px solid var(--bd2)}
-.otbl td.indent{padding-left:22px;color:var(--ink3)}
-.synbar{background:var(--beige2);border-radius:var(--r);padding:8px 14px;font-size:11px;color:var(--ink3);font-family:'DM Mono',monospace;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
-.robanner{background:var(--goldl);border:1px solid rgba(184,152,75,.3);border-radius:var(--r);padding:10px 16px;font-size:12px;color:var(--gold);font-weight:600;margin-bottom:14px;display:flex;align-items:center;gap:8px}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pakka Indian Kitchen — Restaurant Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=DM+Mono:wght@400;500&display=swap');
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0
+    }
+
+    :root {
+        --beige: #F5F0E8;
+        --beige2: #EDE8DE;
+        --beige3: #E0D8C8;
+        --panel: #FFFDF8;
+        --panel2: #F7F2EA;
+        --green: #00664C;
+        --green2: #005240;
+        --gl: #E8F3EF;
+        --orange: #F37829;
+        --ol: #FEF0E6;
+        --gold: #B8984B;
+        --goldl: #F5EFD8;
+        --red: #b83232;
+        --rl: #FEE8E8;
+        --ink: #1a1a1a;
+        --ink2: #444;
+        --ink3: #777;
+        --ink4: #aaa;
+        --bd: #D4CBBA;
+        --bd2: #BEB5A2;
+        --r: 10px;
+        --rlg: 14px;
+    }
+
+    body {
+        font-family: 'Cairo', sans-serif;
+        background: var(--beige);
+        color: var(--ink);
+        font-size: 15px;
+        line-height: 1.5;
+        min-height: 100vh
+    }
+
+    .login-wrap {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--beige)
+    }
+
+    .login-card {
+        background: var(--panel);
+        border: 1px solid var(--bd);
+        border-radius: var(--rlg);
+        padding: 40px 44px;
+        width: 420px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, .08)
+    }
+
+    .lbl {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: .06em;
+        text-transform: uppercase;
+        color: var(--ink3);
+        margin-bottom: 6px
+    }
+
+    .linp {
+        width: 100%;
+        padding: 11px 14px;
+        border: 1.5px solid var(--bd);
+        border-radius: var(--r);
+        font-size: 14px;
+        font-family: 'Cairo', sans-serif;
+        background: var(--beige2);
+        color: var(--ink);
+        margin-bottom: 4px;
+        transition: all .15s;
+        outline: none
+    }
+
+    .linp:focus {
+        border-color: var(--green);
+        background: var(--panel)
+    }
+
+    .linp::placeholder {
+        color: var(--ink4)
+    }
+
+    .linp-hint {
+        font-size: 11px;
+        color: var(--ink4);
+        margin-bottom: 16px;
+        line-height: 1.6
+    }
+
+    .lbtn {
+        width: 100%;
+        padding: 13px;
+        border-radius: var(--r);
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: .05em;
+        text-transform: uppercase;
+        cursor: pointer;
+        border: none;
+        background: var(--green);
+        color: #fff;
+        font-family: 'Cairo', sans-serif;
+        transition: all .15s
+    }
+
+    .lbtn:hover {
+        background: var(--green2)
+    }
+
+    .lbtn:disabled {
+        opacity: .55;
+        cursor: not-allowed
+    }
+
+    .lerr {
+        font-size: 12px;
+        color: var(--red);
+        margin-top: 10px;
+        min-height: 16px;
+        text-align: center
+    }
+
+    .topbar {
+        display: flex;
+        align-items: stretch;
+        background: var(--green);
+        border-bottom: 3px solid var(--green2);
+        position: sticky;
+        top: 0;
+        z-index: 20
+    }
+
+    .tb-brand {
+        padding: 8px 18px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        border-right: 1px solid rgba(255, 255, 255, .15);
+        flex-shrink: 0
+    }
+
+    .bsub div:first-child {
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: .12em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, .5)
+    }
+
+    .bsub div:last-child {
+        font-size: 8px;
+        color: rgba(255, 255, 255, .3);
+        font-style: italic
+    }
+
+    .ntabs {
+        display: flex;
+        align-items: stretch;
+        flex: 1;
+        overflow-x: auto
+    }
+
+    .ntab {
+        padding: 0 20px;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: .05em;
+        text-transform: uppercase;
+        cursor: pointer;
+        border: none;
+        background: none;
+        color: rgba(255, 255, 255, .5);
+        border-bottom: 3px solid transparent;
+        transition: all .2s;
+        white-space: nowrap;
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        font-family: 'Cairo', sans-serif;
+        margin-bottom: -3px
+    }
+
+    .ntab:hover {
+        color: rgba(255, 255, 255, .85);
+        background: rgba(255, 255, 255, .06)
+    }
+
+    .ntab.active {
+        color: #fff;
+        border-bottom-color: rgba(255, 255, 255, .9)
+    }
+
+    .ntab .dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--orange);
+        display: none
+    }
+
+    .ntab.has-data .dot {
+        display: block
+    }
+
+    .tbr {
+        padding: 0 14px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        border-left: 1px solid rgba(255, 255, 255, .15);
+        flex-shrink: 0
+    }
+
+    .sdot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #6ee7b7;
+        animation: pulse 2s infinite;
+        flex-shrink: 0
+    }
+
+    .sdot.off {
+        background: #f87171;
+        animation: none
+    }
+
+    @keyframes pulse {
+        0%, 100% {
+            opacity:1
+        }
+
+        50% {
+            opacity: .3
+        }
+    }
+
+    .rbadge {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: .06em;
+        text-transform: uppercase;
+        padding: 3px 9px;
+        border-radius: 4px;
+        background: rgba(255, 255, 255, .15);
+        color: #fff;
+        white-space: nowrap
+    }
+
+    .logoutbtn {
+        font-size: 10px;
+        font-weight: 700;
+        cursor: pointer;
+        border: 1px solid rgba(255, 255, 255, .3);
+        background: transparent;
+        color: rgba(255, 255, 255, .7);
+        padding: 4px 10px;
+        border-radius: 5px;
+        font-family: 'Cairo', sans-serif
+    }
+
+    .logoutbtn:hover {
+        background: rgba(255, 255, 255, .1);
+        color: #fff
+    }
+
+    .ct {
+        padding: 20px;
+        background: var(--beige)
+    }
+
+    .card {
+        background: var(--panel);
+        border: 1px solid var(--bd);
+        border-radius: var(--rlg);
+        padding: 20px 22px;
+        margin-bottom: 14px;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, .04)
+    }
+
+    .ch {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 14px
+    }
+
+    .ctitle {
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+        color: var(--ink3)
+    }
+
+    .acc {
+        width: 4px;
+        height: 16px;
+        border-radius: 2px;
+        background: var(--green);
+        margin-right: 10px;
+        flex-shrink: 0
+    }
+
+    .tr {
+        display: flex;
+        align-items: center
+    }
+
+    .fl {
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: .05em;
+        text-transform: uppercase;
+        color: var(--ink3);
+        margin-bottom: 6px
+    }
+
+    .inp {
+        width: 100%;
+        padding: 11px 14px;
+        border: 1.5px solid var(--bd);
+        border-radius: var(--r);
+        font-size: 15px;
+        font-family: 'Cairo', sans-serif;
+        background: var(--beige2);
+        color: var(--ink);
+        transition: all .15s
+    }
+
+    .inp:focus {
+        outline: none;
+        border-color: var(--green);
+        background: var(--panel)
+    }
+
+    .inp::placeholder {
+        color: var(--ink4)
+    }
+
+    .inp:disabled {
+        opacity: .55;
+        cursor: not-allowed;
+        background: var(--beige3)
+    }
+
+    .inpr {
+        text-align: right;
+        font-family: 'DM Mono', monospace
+    }
+
+    select.inp {
+        cursor: pointer
+    }
+
+    textarea.inp {
+        resize: vertical;
+        min-height: 70px
+    }
+
+    .btn {
+        padding: 10px 18px;
+        border-radius: var(--r);
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: .05em;
+        text-transform: uppercase;
+        cursor: pointer;
+        border: 1.5px solid var(--bd2);
+        background: var(--panel2);
+        color: var(--ink2);
+        transition: all .15s;
+        font-family: 'Cairo', sans-serif
+    }
+
+    .btn:hover:not(:disabled) {
+        border-color: var(--green);
+        color: var(--green);
+        background: var(--gl)
+    }
+
+    .btn:disabled {
+        opacity: .4;
+        cursor: not-allowed
+    }
+
+    .btng {
+        background: var(--green);
+        color: #fff;
+        border-color: var(--green)
+    }
+
+    .btng:hover:not(:disabled) {
+        background: var(--green2);
+        color: #fff
+    }
+
+    .btnsm {
+        padding: 6px 12px;
+        font-size: 11px
+    }
+
+    .btno {
+        border-color: transparent;
+        background: transparent;
+        color: var(--ink3)
+    }
+
+    .btno:hover:not(:disabled) {
+        background: var(--beige2);
+        color: var(--ink2)
+    }
+
+    .btndel {
+        border-color: transparent;
+        background: transparent;
+        color: var(--red);
+        opacity: .7
+    }
+
+    .btndel:hover {
+        background: var(--rl);
+        color: var(--red);
+        opacity: 1
+    }
+
+    .sok {
+        display: none;
+        font-size: 11px;
+        color: var(--green);
+        font-weight: 700
+    }
+
+    .g2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px
+    }
+
+    .g4 {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px
+    }
+
+    .badge {
+        display: inline-flex;
+        align-items: center;
+        font-size: 11px;
+        font-weight: 700;
+        padding: 4px 10px;
+        border-radius: 5px;
+        white-space: nowrap;
+        font-family: 'DM Mono', monospace
+    }
+
+    .bg {
+        background: var(--gl);
+        color: var(--green);
+        border: 1px solid rgba(0, 102, 76, .2)
+    }
+
+    .br {
+        background: var(--rl);
+        color: var(--red);
+        border: 1px solid rgba(184, 50, 50, .2)
+    }
+
+    .bo {
+        background: var(--ol);
+        color: var(--orange);
+        border: 1px solid rgba(243, 120, 41, .2)
+    }
+
+    .bgold {
+        background: var(--goldl);
+        color: var(--gold);
+        border: 1px solid rgba(184, 152, 75, .25)
+    }
+
+    .bdim {
+        background: var(--beige2);
+        color: var(--ink3);
+        border: 1px solid var(--bd)
+    }
+
+    .tag {
+        display: inline-block;
+        font-size: 10px;
+        font-weight: 700;
+        padding: 2px 7px;
+        border-radius: 4px;
+        letter-spacing: .04em;
+        text-transform: uppercase;
+        font-family: 'DM Mono', monospace
+    }
+
+    .tp {
+        background: var(--gl);
+        color:var(--green)
+    }
+
+    .ts {
+        background: var(--goldl);
+        color: var(--gold)
+    }
+
+    .wc {
+        border-radius: var(--rlg);
+        padding: 20px 22px;
+        border: 1.5px solid
+    }
+
+    .wg {
+        background: var(--gl);
+        border-color: rgba(0, 102, 76, .3);
+        color: var(--green)
+    }
+
+    .wr {
+        background: var(--rl);
+        border-color: rgba(184, 50, 50, .25);
+        color: var(--red)
+    }
+
+    .wgold {
+        background: var(--goldl);
+        border-color: rgba(184, 152, 75, .3);
+        color: var(--gold)
+    }
+
+    .wb {
+        background: var(--beige2);
+        border-color: var(--bd2);
+        color: var(--ink2)
+    }
+
+    .wc .wl {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+        margin-bottom: 10px;
+        opacity: .7
+    }
+
+    .wc .wv {
+        font-size: 24px;
+        font-weight: 800;
+        line-height: 1.1
+    }
+
+    .wc .ws {
+        font-size: 11px;
+        margin-top: 6px;
+        opacity: .65;
+        font-family: 'DM Mono', monospace
+    }
+
+    .pb {
+        height: 6px;
+        background: var(--beige3);
+        border-radius: 3px;
+        overflow: hidden;
+        margin-top: 10px
+    }
+
+    .pf {
+        height: 100%;
+        border-radius: 3px;
+        transition: width .4s
+    }
+
+    .nh {
+        background: var(--gl);
+        border: 1.5px solid rgba(0, 102, 76, .18);
+        border-radius: var(--r);
+        padding: 12px 16px;
+        margin: 8px 0
+    }
+
+    .pfbox {
+        border: 1.5px solid rgba(0, 102, 76, .2);
+        border-radius: var(--r);
+        padding: 14px 18px;
+        background: var(--panel);
+        margin-top: 6px
+    }
+
+    .wfr {
+        display: grid;
+        grid-template-columns: 165px 1fr 55px;
+        align-items: center;
+        gap: 10px;
+        margin: 5px 0
+    }
+
+    .wfl {
+        font-size: 13px;
+        color: var(--ink2);
+        font-weight: 600
+    }
+
+    .wft {
+        height: 22px;
+        background: var(--beige3);
+        border-radius: 3px;
+        overflow: hidden;
+        border: 1px solid var(--bd)
+    }
+
+    .wff {
+        height: 100%;
+        border-radius: 3px;
+        display: flex;
+        align-items: center;
+        padding-left: 8px;
+        font-size: 10px;
+        font-weight: 700;
+        font-family: 'DM Mono', monospace;
+        transition: width .5s
+    }
+
+    .wfp {
+        font-size: 11px;
+        color: var(--ink3);
+        text-align: right;
+        font-family: 'DM Mono', monospace
+    }
+
+    .mr {
+        display: grid;
+        grid-template-columns: 1fr 92px 120px 85px;
+        gap: 12px;
+        align-items: center;
+        padding: 13px 0;
+        border-bottom: 1px solid var(--bd)
+    }
+
+    .mr:last-child {
+        border-bottom: none
+    }
+
+    .mhdr {
+        display: grid;
+        grid-template-columns: 1fr 92px 120px 85px;
+        gap: 12px;
+        padding: 8px 0 10px;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: .07em;
+        text-transform: uppercase;
+        color: var(--ink4);
+        border-bottom: 1.5px solid var(--bd2)
+    }
+
+    .ml {
+        font-size: 15px;
+        font-weight: 600;
+        color:var(--ink)
+    }
+
+    .ms {
+        font-size: 12px;
+        color: var(--ink3);
+        margin-top: 2px
+    }
+
+    .mono {
+        font-family: 'DM Mono', monospace;
+        text-align: right;
+        font-size: 14px;
+        color: var(--ink2)
+    }
+
+    .sdiv {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+        color: var(--ink4);
+        padding: 12px 0 5px;
+        border-bottom: 1.5px solid var(--bd2)
+    }
+
+    .fr {
+        display: grid;
+        grid-template-columns: 1fr 160px 70px;
+        gap: 12px;
+        align-items: center;
+        padding: 13px 0;
+        border-bottom: 1px solid var(--bd)
+    }
+
+    .fr:last-child {
+        border-bottom: none
+    }
+
+    .fhdr {
+        display: grid;
+        grid-template-columns: 1fr 160px 70px;
+        gap: 12px;
+        padding: 8px 0 10px;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: .07em;
+        text-transform: uppercase;
+        color: var(--ink4);
+        border-bottom: 1.5px solid var(--bd2)
+    }
+
+    .optbl {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px
+    }
+
+    .optbl th {
+        text-align: left;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: .07em;
+        text-transform: uppercase;
+        color: var(--ink4);
+        padding: 9px 10px;
+        border-bottom: 1.5px solid var(--bd2)
+    }
+
+    .optbl th.r, .optbl td.r {
+        text-align: right
+    }
+
+    .optbl td {
+        padding: 11px 10px;
+        border-bottom: 1px solid var(--bd);
+        color: var(--ink);
+        vertical-align: middle
+    }
+
+    .optbl tr:last-child td {
+        border-bottom: none
+    }
+
+    .optbl tr.rn td {
+        background: var(--gl);
+        font-weight: 700
+    }
+
+    .optbl tr.rt td {
+        background: var(--beige2);
+        font-weight: 700;
+        border-top: 1.5px solid var(--bd2)
+    }
+
+    .optbl tr.rp td {
+        font-weight: 700
+    }
+
+    .optbl tr:hover:not(.rn):not(.rt) td {
+        background: var(--beige2)
+    }
+
+    .mpill {
+        padding: 7px 16px;
+        border-radius: 99px;
+        font-size: 11px;
+        font-weight: 700;
+        cursor: pointer;
+        border: 1.5px solid var(--bd2);
+        background: var(--panel);
+        color: var(--ink3);
+        transition: all .15s;
+        white-space: nowrap;
+        font-family: 'Cairo', sans-serif
+    }
+
+    .mpill:hover {
+        border-color: var(--green);
+        color: var(--green)
+    }
+
+    .mpill.active {
+        background: var(--green);
+        color: #fff;
+        border-color: var(--green)
+    }
+
+    .stabs {
+        display: flex;
+        gap: 4px;
+        margin-bottom: 18px;
+        background: var(--panel);
+        border: 1.5px solid var(--bd);
+        border-radius: var(--r);
+        padding: 4px
+    }
+
+    .stab {
+        padding: 8px 18px;
+        border-radius: 7px;
+        font-size: 11px;
+        font-weight: 700;
+        cursor: pointer;
+        border: none;
+        background: none;
+        color: var(--ink3);
+        transition: all .15s;
+        font-family: 'Cairo', sans-serif
+    }
+
+    .stab:hover {
+        color:var(--green)
+    }
+
+    .stab.active {
+        background: var(--green);
+        color: #fff
+    }
+
+    .kpi {
+        background: var(--panel);
+        border: 1.5px solid var(--bd);
+        border-radius: var(--rlg);
+        padding: 16px 18px;
+        position: relative;
+        overflow: hidden
+    }
+
+    .kpi::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: var(--green)
+    }
+
+    .kl {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+        color: var(--ink4);
+        margin-bottom: 8px
+    }
+
+    .kv {
+        font-size: 20px;
+        font-weight: 800;
+        color: var(--ink);
+        line-height: 1
+    }
+
+    .ks {
+        font-size: 12px;
+        color: var(--ink3);
+        margin-top: 4px;
+        font-family: 'DM Mono', monospace
+    }
+
+    .htbl {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px
+    }
+
+    .htbl th {
+        text-align: left;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: .07em;
+        text-transform: uppercase;
+        color: var(--ink4);
+        padding: 8px 10px;
+        border-bottom: 1.5px solid var(--bd2)
+    }
+
+    .htbl th.r, .htbl td.r {
+        text-align: right
+    }
+
+    .htbl td {
+        padding: 11px 10px;
+        border-bottom: 1px solid var(--bd);
+        color: var(--ink);
+        vertical-align: middle
+    }
+
+    .htbl tr:last-child td {
+        border-bottom:none
+    }
+
+    .htbl tr:hover td {
+        background: var(--beige2)
+    }
+
+    .oscroll {
+        overflow-x: auto
+    }
+
+    .otbl {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 12px;
+        min-width: 500px
+    }
+
+    .otbl th {
+        padding: 10px 12px;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: .07em;
+        text-transform: uppercase;
+        color: var(--ink4);
+        border-bottom: 1.5px solid var(--bd2);
+        background: var(--panel2);
+        text-align: right;
+        white-space: nowrap
+    }
+
+    .otbl th.lh {
+        text-align: left;
+        min-width: 180px;
+        position: sticky;
+        left: 0;
+        background: var(--panel2);
+        z-index: 3;
+        border-right: 1.5px solid var(--bd2)
+    }
+
+    .otbl td {
+        padding: 9px 12px;
+        border-bottom: 1px solid var(--bd);
+        text-align: right;
+        font-family: 'DM Mono', monospace;
+        font-size: 11px;
+        white-space: nowrap;
+        background: var(--panel)
+    }
+
+    .otbl td.lc {
+        text-align: left;
+        font-family: 'Cairo', sans-serif;
+        font-size: 12px;
+        position: sticky;
+        left: 0;
+        background: var(--panel);
+        z-index: 2;
+        border-right: 1.5px solid var(--bd2)
+    }
+
+    .otbl tr:hover td, .otbl tr:hover td.lc {
+        background: var(--beige2)
+    }
+
+    .otbl tr.rn td, .otbl tr.rn td.lc {
+        background: var(--gl);
+        font-weight: 700
+    }
+
+    .otbl tr.rt td, .otbl tr.rt td.lc {
+        background: var(--panel2);
+        font-weight: 700;
+        border-top: 1.5px solid var(--bd2)
+    }
+
+    .otbl tr.rp td, .otbl tr.rp td.lc {
+        font-weight: 700;
+        border-top: 1.5px solid var(--bd2)
+    }
+
+    .otbl tr.rperf td, .otbl tr.rperf td.lc {
+        background: var(--beige3);
+        border-top: 2px solid var(--bd2);
+        border-bottom: 2px solid var(--bd2)
+    }
+
+    .otbl td.indent {
+        padding-left: 22px;
+        color: var(--ink3)
+    }
+
+    .synbar {
+        background: var(--beige2);
+        border-radius: var(--r);
+        padding: 8px 14px;
+        font-size: 11px;
+        color: var(--ink3);
+        font-family: 'DM Mono', monospace;
+        margin-bottom: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between
+    }
+
+    .robanner {
+        background: var(--goldl);
+        border: 1px solid rgba(184, 152, 75, .3);
+        border-radius: var(--r);
+        padding: 10px 16px;
+        font-size: 12px;
+        color: var(--gold);
+        font-weight: 600;
+        margin-bottom: 14px;
+        display: flex;
+        align-items: center;
+        gap: 8px
+    }/* WALLET BREAKDOWN TABLE */
+
+    .wbtbl {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 12px;
+        margin-top: 14px
+    }
+
+    .wbtbl th {
+        text-align: left;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: .07em;
+        text-transform: uppercase;
+        color: var(--ink4);
+        padding: 7px 10px;
+        border-bottom: 1.5px solid var(--bd2);
+        background: var(--panel2)
+    }
+
+    .wbtbl th.r {
+        text-align: right
+    }
+
+    .wbtbl td {
+        padding: 9px 10px;
+        border-bottom: 1px solid var(--bd);
+        font-size: 12px;
+        vertical-align: middle
+    }
+
+    .wbtbl td.r {
+        text-align: right;
+        font-family: 'DM Mono', monospace
+    }
+
+    .wbtbl tr:last-child td {
+        border-bottom: none
+    }
+
+    .wbtbl tr.wbtot td {
+        background: var(--beige2);
+        font-weight: 700;
+        border-top: 1.5px solid var(--bd2)
+    }
+
+    .wbtbl tr:hover:not(.wbtot) td {
+        background: var(--beige2)
+    }
+    </style>
 </head>
 <body>
 
-<!-- LOGIN -->
-<div id="login-screen" class="login-wrap">
-  <div class="login-card">
-    <div style="text-align:center;margin-bottom:24px">
-      <svg viewBox="0 0 210 48" height="38" xmlns="http://www.w3.org/2000/svg" style="display:inline-block">
-        <text x="3.5" y="41.5" font-family="Georgia,serif" font-size="46" font-weight="900" fill="#E8D0A8" letter-spacing="-2">PAKKA</text>
-        <text x="2" y="40" font-family="Georgia,serif" font-size="46" font-weight="900" fill="#F37829" letter-spacing="-2">PAKKA</text>
-      </svg>
-      <div style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink4);margin-top:4px">Indian Kitchen · Restaurant Dashboard</div>
-    </div>
-    <div style="font-size:20px;font-weight:800;margin-bottom:4px">Sign in</div>
-    <div style="font-size:13px;color:var(--ink3);margin-bottom:24px">Enter your role password to access the dashboard</div>
-    <div class="lbl">Google Apps Script URL</div>
-    <input class="linp" id="api-url" style="font-family:'DM Mono',monospace;font-size:12px" placeholder="https://script.google.com/macros/s/.../exec">
-    <div class="linp-hint">Your deployed Web App URL. Saved in browser after first login.</div>
-    <div class="lbl">Password</div>
-    <input class="linp" id="login-pw" type="password" placeholder="Enter your role password" style="margin-bottom:18px" onkeydown="if(event.key==='Enter')doLogin()">
-    <button class="lbtn" id="lbtn" onclick="doLogin()">Sign in</button>
-    <div class="lerr" id="lerr"></div>
-    <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--bd)">
-      <div style="font-size:11px;color:var(--ink4);margin-bottom:8px;font-weight:600;text-transform:uppercase;letter-spacing:.04em">Access levels</div>
-      <div style="display:flex;flex-direction:column;gap:5px">
-        <div style="display:flex;align-items:center;gap:8px;padding:7px 10px;background:var(--gl);border-radius:var(--r)"><span>🔧</span><div><div style="font-size:12px;font-weight:700;color:var(--green)">Management</div><div style="font-size:11px;color:var(--ink3)">Edit targets · View all tabs</div></div></div>
-        <div style="display:flex;align-items:center;gap:8px;padding:7px 10px;background:var(--goldl);border-radius:var(--r)"><span>💰</span><div><div style="font-size:12px;font-weight:700;color:var(--gold)">Finance</div><div style="font-size:11px;color:var(--ink3)">Enter monthly data · Edit & delete records</div></div></div>
-        <div style="display:flex;align-items:center;gap:8px;padding:7px 10px;background:var(--beige2);border-radius:var(--r)"><span>👁</span><div><div style="font-size:12px;font-weight:700;color:var(--ink2)">Operations</div><div style="font-size:11px;color:var(--ink3)">View all tabs · Read only</div></div></div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- MAIN APP -->
-<div id="main-app" style="display:none">
-  <div class="topbar">
-    <div class="tb-brand">
-      <svg viewBox="0 0 210 48" height="40" xmlns="http://www.w3.org/2000/svg" style="display:block;flex-shrink:0">
-        <text x="3.5" y="41.5" font-family="Georgia,serif" font-size="46" font-weight="900" fill="#E8D0A8" letter-spacing="-2">PAKKA</text>
-        <text x="2" y="40" font-family="Georgia,serif" font-size="46" font-weight="900" fill="#F37829" letter-spacing="-2">PAKKA</text>
-        <text x="2" y="40" font-family="Georgia,serif" font-size="46" font-weight="900" fill="none" stroke="#C05A18" stroke-width="0.5" letter-spacing="-2">PAKKA</text>
-      </svg>
-      <div class="bsub"><div>Indian Kitchen</div><div>The Joy of Flavor</div></div>
-    </div>
-    <div class="ntabs">
-      <button class="ntab active" onclick="sw('mgmt',this)" id="tab-mgmt"><div class="dot"></div>Management</button>
-      <button class="ntab" onclick="sw('finance',this)" id="tab-finance"><div class="dot"></div>Finance</button>
-      <button class="ntab" onclick="sw('ops',this)" id="tab-ops"><div class="dot"></div>Operations</button>
-    </div>
-    <div class="tbr">
-      <div class="sdot" id="sdot"></div>
-      <span id="rbadge" class="rbadge">—</span>
-      <button class="logoutbtn" onclick="logout()">Sign out</button>
-    </div>
-  </div>
-  <div class="ct">
-    <!-- MANAGEMENT -->
-    <div id="view-mgmt">
-      <div id="ro-banner" class="robanner" style="display:none">🔒 Read-only — only Management can edit targets</div>
-      <div class="synbar"><span id="s-mgmt">Not synced</span><button class="btn btnsm btno" onclick="loadAll()">↻ Refresh</button></div>
-      <div class="g2" style="margin-bottom:14px">
-        <div class="card" style="margin-bottom:0"><div class="ch"><div class="tr"><div class="acc"></div><div class="ctitle">Restaurant info</div></div></div><div class="g2"><div><div class="fl">Restaurant name</div><input class="inp" id="m-name" placeholder="Pakka Indian Kitchen" oninput="ml()"></div><div><div class="fl">Monthly gross target (SAR)</div><input class="inp inpr" id="m-gross" type="number" placeholder="600000" oninput="ml()"></div></div></div>
-        <div class="card" style="margin-bottom:0"><div class="ch"><div class="tr"><div class="acc" style="background:var(--gold)"></div><div class="ctitle">P&L health check</div></div><span id="m-badge" class="badge bdim">—</span></div><div class="pb"><div class="pf" id="m-prog" style="background:var(--green);width:0%"></div></div><div style="margin-top:10px;font-size:14px;color:var(--ink3);font-family:'DM Mono',monospace" id="m-prev">Set targets to validate</div></div>
-      </div>
-      <div class="card">
-        <div class="ch"><div class="tr"><div class="acc"></div><div class="ctitle">P&L targets — % of net sales</div></div><div style="display:flex;gap:8px"><span class="tag tp">% ref</span><span class="tag ts">SAR ref</span></div></div>
-        <div class="mhdr"><div>Line item</div><div style="text-align:right">Target %</div><div style="text-align:right">SAR amount</div><div style="text-align:right">Ref</div></div>
-        <div class="sdiv" style="margin-top:4px">Sales structure</div>
-        <div class="mr"><div><div class="ml">Gross sales</div><div class="ms">Top-line revenue</div></div><div><input class="inp inpr" id="m-p-gross" type="number" value="120" style="width:84px" oninput="ml()"></div><div class="mono" id="m-s-gross">—</div><div style="text-align:right"><span class="tag tp">% ref</span></div></div>
-        <div class="mr" style="background:var(--beige2);border-radius:var(--r);padding:12px 8px"><div><div class="ml" style="color:var(--ink3)">VAT + discounts + delivery</div><div class="ms">Deducted from gross</div></div><div><input class="inp inpr" id="m-p-vat" type="number" value="20" style="width:84px" oninput="ml()"></div><div class="mono" id="m-s-vat">—</div><div style="text-align:right"><span class="tag tp">% ref</span></div></div>
-        <div class="nh"><div style="display:grid;grid-template-columns:1fr 92px 120px 85px;gap:12px;align-items:center"><div><div class="ml" style="color:var(--green);font-size:16px;font-weight:800">Total net sales</div><div class="ms">Base = 100%</div></div><div style="text-align:right;font-size:16px;font-weight:800;color:var(--green);font-family:'DM Mono',monospace">100%</div><div style="font-size:15px;font-weight:700;color:var(--green);font-family:'DM Mono',monospace;text-align:right" id="m-s-net">—</div><div></div></div></div>
-        <div class="sdiv" style="margin-top:8px">Cost targets</div>
-        <div id="m-cost-rows"></div>
-        <div class="pfbox"><div style="display:grid;grid-template-columns:1fr 92px 120px 85px;gap:12px;align-items:center"><div><div class="ml" style="font-size:18px;font-weight:900">Net profit target</div><div class="ms">= Net sales − all costs</div></div><div style="text-align:right;font-size:22px;font-weight:900" id="m-pp">—</div><div style="text-align:right;font-size:15px;font-weight:700;font-family:'DM Mono',monospace" id="m-ps">—</div><div></div></div></div>
-      </div>
-      <div class="g2" style="margin-bottom:14px">
-        <div class="card" style="margin-bottom:0"><div class="ch"><div class="tr"><div class="acc" style="background:var(--gold)"></div><div class="ctitle">Target P&L waterfall</div></div></div><div id="m-wf"></div></div>
-        <div class="card" style="margin-bottom:0"><div class="ch"><div class="tr"><div class="acc"></div><div class="ctitle">Cost mix</div></div></div><div style="position:relative;width:100%;height:210px"><canvas id="c-donut"></canvas></div><div id="c-legend" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;font-size:11px;color:var(--ink3)"></div></div>
-      </div>
-      <div id="save-row" style="display:flex;gap:12px;align-items:center"><button class="btn btng" id="m-save-btn" onclick="saveTgts()">Save targets to Google Sheet</button><span class="sok" id="m-ok">Saved ✓</span></div>
-    </div>
-    <!-- FINANCE -->
-    <div id="view-finance" style="display:none">
-      <div class="synbar"><span id="s-fin">Not synced</span><button class="btn btnsm btno" onclick="loadAll()">↻ Refresh</button></div>
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px">
-        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
-          <select class="inp" id="f-month" style="width:auto;font-size:14px"><option value="01">January</option><option value="02">February</option><option value="03">March</option><option value="04">April</option><option value="05">May</option><option value="06">June</option><option value="07">July</option><option value="08">August</option><option value="09">September</option><option value="10">October</option><option value="11">November</option><option value="12">December</option></select>
-          <select class="inp" id="f-year" style="width:auto;font-size:14px"><option>2024</option><option selected>2025</option><option>2026</option></select>
-          <button class="btn btno btnsm" onclick="clearFin()">Clear</button>
+    <!-- LOGIN -->
+    <div id="login-screen" class="login-wrap">
+        <div class="login-card">
+            <div style="text-align:center;margin-bottom:24px">
+                <svg viewBox="0 0 210 48" height="38" xmlns="http://www.w3.org/2000/svg" style="display:inline-block">
+                    <text x="3.5" y="41.5" font-family="Georgia,serif" font-size="46" font-weight="900" fill="#E8D0A8" letter-spacing="-2">PAKKA</text>
+                    <text x="2" y="40" font-family="Georgia,serif" font-size="46" font-weight="900" fill="#F37829" letter-spacing="-2">PAKKA</text>
+                </svg>
+                <div style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink4);margin-top:4px">Indian Kitchen · Restaurant Dashboard</div>
+            </div>
+            <div style="font-size:20px;font-weight:800;margin-bottom:4px">Sign in</div>
+            <div style="font-size:13px;color:var(--ink3);margin-bottom:24px">Enter your role password to access the dashboard</div>
+            <div class="lbl">Google Apps Script URL</div>
+            <input class="linp" id="api-url" style="font-family:'DM Mono',monospace;font-size:12px" placeholder="https://script.google.com/macros/s/.../exec">
+            <div class="linp-hint">Your deployed Web App URL. Saved in browser after first login.</div>
+            <div class="lbl">Password</div>
+            <input class="linp" id="login-pw" type="password" placeholder="Enter your role password" style="margin-bottom:18px" onkeydown="if(event.key==='Enter')doLogin()">
+            <button class="lbtn" id="lbtn" onclick="doLogin()">Sign in</button>
+            <div class="lerr" id="lerr"></div>
+            <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--bd)">
+                <div style="font-size:11px;color:var(--ink4);margin-bottom:8px;font-weight:600;text-transform:uppercase;letter-spacing:.04em">Access levels</div>
+                <div style="display:flex;flex-direction:column;gap:5px">
+                    <div style="display:flex;align-items:center;gap:8px;padding:7px 10px;background:var(--gl);border-radius:var(--r)">
+                        <span>🔧</span>
+                        <div>
+                            <div style="font-size:12px;font-weight:700;color:var(--green)">Management</div>
+                            <div style="font-size:11px;color:var(--ink3)">Edit targets · View all tabs</div>
+                        </div>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:8px;padding:7px 10px;background:var(--goldl);border-radius:var(--r)">
+                        <span>💰</span>
+                        <div>
+                            <div style="font-size:12px;font-weight:700;color:var(--gold)">Finance</div>
+                            <div style="font-size:11px;color:var(--ink3)">Enter monthly data · Edit & delete records</div>
+                        </div>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:8px;padding:7px 10px;background:var(--beige2);border-radius:var(--r)">
+                        <span>👁</span>
+                        <div>
+                            <div style="font-size:12px;font-weight:700;color:var(--ink2)">Operations</div>
+                            <div style="font-size:11px;color:var(--ink3)">View all tabs · Read only</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div id="f-live" style="background:var(--panel);border:1.5px solid var(--bd);border-radius:var(--r);padding:10px 16px;font-size:13px;color:var(--ink2);font-family:'DM Mono',monospace">Enter figures to see live P&L</div>
-      </div>
-      <div class="g2" style="margin-bottom:14px">
-        <div class="card" style="margin-bottom:0">
-          <div class="ch"><div class="tr"><div class="acc"></div><div class="ctitle">Sales</div></div></div>
-          <div class="fhdr"><div>Line item</div><div style="text-align:right">SAR amount</div><div style="text-align:right">% net</div></div>
-          <div class="fr"><div><div class="ml">Gross sales</div><div class="ms">Total top-line revenue</div></div><input class="inp inpr" id="f-gross" type="number" placeholder="0" oninput="fl()"><div class="mono" id="fd-gross">—</div></div>
-          <div class="fr" style="background:var(--beige2);border-radius:var(--r);padding:12px 10px"><div><div class="ml" style="color:var(--ink3)">VAT + discounts + delivery</div></div><input class="inp inpr" id="f-vat" type="number" placeholder="0" oninput="fl()"><div class="mono" id="fd-vat">—</div></div>
-          <div class="nh" style="margin-top:10px"><div style="display:flex;align-items:center;justify-content:space-between"><div class="ml" style="color:var(--green);font-size:16px;font-weight:800">Total net sales</div><div style="font-size:17px;font-weight:700;color:var(--green);font-family:'DM Mono',monospace" id="fd-net">—</div></div></div>
-        </div>
-        <div class="card" style="margin-bottom:0">
-          <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px"><div><div style="font-size:16px;font-weight:800;margin-bottom:4px">Net profit / loss</div><div class="ms">Net sales − total costs</div><div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap" id="f-badges"></div></div><div style="text-align:right"><div style="font-size:30px;font-weight:900;line-height:1" id="f-pval">—</div><div style="font-size:13px;margin-top:4px;font-family:'DM Mono',monospace" id="f-ppct">—</div></div></div>
-          <div class="pb"><div id="f-pbar" style="height:100%;border-radius:3px;width:0%;transition:width .3s;background:var(--green)"></div></div>
-          <div style="margin-top:16px" id="f-vtgt"></div>
-        </div>
-      </div>
-      <div class="card"><div class="ch"><div class="tr"><div class="acc" style="background:var(--orange);opacity:.7"></div><div class="ctitle">Costs & expenses</div></div></div><div class="fhdr"><div>Line item</div><div style="text-align:right">SAR amount</div><div style="text-align:right">% net</div></div><div id="f-cost-rows"></div><div class="fr" style="border-top:1.5px solid var(--bd2);margin-top:4px;padding-top:13px"><div class="ml" style="font-size:16px;color:var(--ink2)">Total costs</div><div class="mono" style="font-weight:700;color:var(--ink2);font-size:15px" id="fd-tc">—</div><div class="mono" id="fd-tcp">—</div></div></div>
-      <div class="card"><div class="ch"><div class="ctitle">Notes</div></div><textarea class="inp" id="f-notes" placeholder="Optional: Ramadan effect, one-off costs, promotions..."></textarea><div style="display:flex;gap:12px;margin-top:14px;align-items:center"><button class="btn btng" id="f-save-btn" onclick="saveMonth()">Save to Google Sheet</button><span class="sok" id="f-ok">Saved ✓</span></div></div>
-      <div class="card"><div class="ch"><div class="tr"><div class="acc" style="background:var(--gold)"></div><div class="ctitle">Saved records</div></div><button class="btn btnsm btno" onclick="expCSV()">Export CSV</button></div><div id="f-hist"></div></div>
     </div>
-    <!-- OPERATIONS -->
-    <div id="view-ops" style="display:none">
-      <div class="synbar"><span id="s-ops">Not synced</span><button class="btn btnsm btno" onclick="loadAll()">↻ Refresh</button></div>
-      <div id="ops-wallet" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:12px;margin-bottom:20px"><div style="font-size:13px;color:var(--ink3);padding:10px 0;grid-column:1/-1">No data yet.</div></div>
-      <div class="g2" style="margin-bottom:20px">
-        <div class="card" style="margin-bottom:0"><div class="ch"><div class="tr"><div class="acc"></div><div class="ctitle">Monthly net profit / loss</div></div></div><div style="display:flex;gap:12px;margin-bottom:8px;font-size:11px;color:var(--ink3)"><span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:#00664C;display:inline-block"></span>Profit</span><span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:#b83232;display:inline-block"></span>Loss</span></div><div style="position:relative;width:100%;height:195px"><canvas id="c-profit"></canvas></div></div>
-        <div class="card" style="margin-bottom:0"><div class="ch"><div class="tr"><div class="acc" style="background:var(--gold)"></div><div class="ctitle">Actual vs target costs (latest month)</div></div></div><div style="display:flex;gap:12px;margin-bottom:8px;font-size:11px;color:var(--ink3)"><span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:#F37829;display:inline-block"></span>Actual %</span><span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:rgba(0,102,76,.3);border:1px solid #00664C;display:inline-block"></span>Target %</span></div><div style="position:relative;width:100%;height:195px"><canvas id="c-cost"></canvas></div></div>
-      </div>
-      <div class="stabs"><button class="stab active" onclick="swOps('monthly',this)">Monthly detail</button><button class="stab" onclick="swOps('allmonths',this)">All months</button></div>
-      <div id="ops-monthly">
-        <div class="card" style="padding:14px 20px;margin-bottom:14px"><div class="ctitle" style="margin-bottom:10px">Select month</div><div style="display:flex;gap:8px;flex-wrap:wrap" id="ops-pills"><div style="font-size:13px;color:var(--ink3)">No records yet.</div></div></div>
-        <div class="g4" id="ops-kpi" style="margin-bottom:14px"></div>
-        <div class="card" id="ops-plc" style="display:none"><div class="ch"><div style="font-size:16px;font-weight:800" id="ops-mtitle">—</div><div style="display:flex;gap:8px"><span class="badge bg" style="font-size:10px">+SAR under budget</span><span class="badge br" style="font-size:10px">-SAR over budget</span></div></div><div style="overflow-x:auto"><table class="optbl" style="width:100%"><thead><tr><th style="width:30%">Line item</th><th class="r">Actual (SAR)</th><th class="r">% of net</th><th class="r">Target (SAR)</th><th class="r">Ref</th><th class="r">Performance</th></tr></thead><tbody id="ops-plbody"></tbody></table></div></div>
-      </div>
-      <div id="ops-allmonths" style="display:none">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px"><span style="font-size:12px;color:var(--ink3);font-family:'DM Mono',monospace" id="ops-cnt">—</span><div style="display:flex;gap:8px"><span class="badge bg" style="font-size:10px">+SAR under budget</span><span class="badge br" style="font-size:10px">-SAR over budget</span></div></div>
-        <div class="card" style="padding:0;overflow:hidden"><div class="oscroll"><div id="ops-tbl"><div style="padding:40px;text-align:center;font-size:13px;color:var(--ink3)">No records yet.</div></div></div></div>
-      </div>
+
+    <!-- MAIN APP -->
+    <div id="main-app" style="display:none">
+        <div class="topbar">
+            <div class="tb-brand">
+                <svg viewBox="0 0 210 48" height="40" xmlns="http://www.w3.org/2000/svg" style="display:block;flex-shrink:0">
+                    <text x="3.5" y="41.5" font-family="Georgia,serif" font-size="46" font-weight="900" fill="#E8D0A8" letter-spacing="-2">PAKKA</text>
+                    <text x="2" y="40" font-family="Georgia,serif" font-size="46" font-weight="900" fill="#F37829" letter-spacing="-2">PAKKA</text>
+                    <text x="2" y="40" font-family="Georgia,serif" font-size="46" font-weight="900" fill="none" stroke="#C05A18" stroke-width="0.5" letter-spacing="-2">PAKKA</text>
+                </svg>
+                <div class="bsub">
+                    <div>Indian Kitchen</div>
+                    <div>The Joy of Flavor</div>
+                </div>
+            </div>
+            <div class="ntabs">
+                <button class="ntab active" onclick="sw('mgmt',this)" id="tab-mgmt">
+                    <div class="dot"></div>
+                    Management
+                </button>
+                <button class="ntab" onclick="sw('finance',this)" id="tab-finance">
+                    <div class="dot"></div>
+                    Finance
+                </button>
+                <button class="ntab" onclick="sw('ops',this)" id="tab-ops">
+                    <div class="dot"></div>
+                    Operations
+                </button>
+            </div>
+            <div class="tbr">
+                <div class="sdot" id="sdot"></div>
+                <span id="rbadge" class="rbadge">—</span>
+                <button class="logoutbtn" onclick="logout()">Sign out</button>
+            </div>
+        </div>
+
+        <div class="ct">
+
+            <!-- MANAGEMENT -->
+            <div id="view-mgmt">
+                <div id="ro-banner" class="robanner" style="display:none">🔒 Read-only — only Management can edit targets</div>
+                <div class="synbar">
+                    <span id="s-mgmt">Not synced</span>
+                    <button class="btn btnsm btno" onclick="loadAll()">↻ Refresh</button>
+                </div>
+                <div class="g2" style="margin-bottom:14px">
+                    <div class="card" style="margin-bottom:0">
+                        <div class="ch">
+                            <div class="tr">
+                                <div class="acc"></div>
+                                <div class="ctitle">Restaurant info</div>
+                            </div>
+                        </div>
+                        <div class="g2">
+                            <div>
+                                <div class="fl">Restaurant name</div>
+                                <input class="inp" id="m-name" placeholder="Pakka Indian Kitchen" oninput="ml()">
+                            </div>
+                            <div>
+                                <div class="fl">Monthly gross target (SAR)</div>
+                                <input class="inp inpr" id="m-gross" type="number" placeholder="600000" oninput="ml()">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card" style="margin-bottom:0">
+                        <div class="ch">
+                            <div class="tr">
+                                <div class="acc" style="background:var(--gold)"></div>
+                                <div class="ctitle">P&L health check</div>
+                            </div>
+                            <span id="m-badge" class="badge bdim">—</span>
+                        </div>
+                        <div class="pb">
+                            <div class="pf" id="m-prog" style="background:var(--green);width:0%"></div>
+                        </div>
+                        <div style="margin-top:10px;font-size:14px;color:var(--ink3);font-family:'DM Mono',monospace" id="m-prev">Set targets to validate</div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="ch">
+                        <div class="tr">
+                            <div class="acc"></div>
+                            <div class="ctitle">P&L targets — % of net sales</div>
+                        </div>
+                        <div style="display:flex;gap:8px">
+                            <span class="tag tp">% ref</span>
+                            <span class="tag ts">SAR ref</span>
+                        </div>
+                    </div>
+                    <div class="mhdr">
+                        <div>Line item</div>
+                        <div style="text-align:right">Target %</div>
+                        <div style="text-align:right">SAR amount</div>
+                        <div style="text-align:right">Ref</div>
+                    </div>
+                    <div class="sdiv" style="margin-top:4px">Sales structure</div>
+                    <div class="mr">
+                        <div>
+                            <div class="ml">Gross sales</div>
+                            <div class="ms">Top-line revenue</div>
+                        </div>
+                        <div>
+                            <input class="inp inpr" id="m-p-gross" type="number" value="120" style="width:84px" oninput="ml()">
+                        </div>
+                        <div class="mono" id="m-s-gross">—</div>
+                        <div style="text-align:right">
+                            <span class="tag tp">% ref</span>
+                        </div>
+                    </div>
+                    <div class="mr" style="background:var(--beige2);border-radius:var(--r);padding:12px 8px">
+                        <div>
+                            <div class="ml" style="color:var(--ink3)">VAT + discounts + delivery</div>
+                            <div class="ms">Deducted from gross</div>
+                        </div>
+                        <div>
+                            <input class="inp inpr" id="m-p-vat" type="number" value="20" style="width:84px" oninput="ml()">
+                        </div>
+                        <div class="mono" id="m-s-vat">—</div>
+                        <div style="text-align:right">
+                            <span class="tag tp">% ref</span>
+                        </div>
+                    </div>
+                    <div class="nh">
+                        <div style="display:grid;grid-template-columns:1fr 92px 120px 85px;gap:12px;align-items:center">
+                            <div>
+                                <div class="ml" style="color:var(--green);font-size:16px;font-weight:800">Total net sales</div>
+                                <div class="ms">Base = 100%</div>
+                            </div>
+                            <div style="text-align:right;font-size:16px;font-weight:800;color:var(--green);font-family:'DM Mono',monospace">100%</div>
+                            <div style="font-size:15px;font-weight:700;color:var(--green);font-family:'DM Mono',monospace;text-align:right" id="m-s-net">—</div>
+                            <div></div>
+                        </div>
+                    </div>
+                    <div class="sdiv" style="margin-top:8px">Cost targets</div>
+                    <div id="m-cost-rows"></div>
+                    <div class="pfbox">
+                        <div style="display:grid;grid-template-columns:1fr 92px 120px 85px;gap:12px;align-items:center">
+                            <div>
+                                <div class="ml" style="font-size:18px;font-weight:900">Net profit target</div>
+                                <div class="ms">= Net sales − all costs</div>
+                            </div>
+                            <div style="text-align:right;font-size:22px;font-weight:900" id="m-pp">—</div>
+                            <div style="text-align:right;font-size:15px;font-weight:700;font-family:'DM Mono',monospace" id="m-ps">—</div>
+                            <div></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="g2" style="margin-bottom:14px">
+                    <div class="card" style="margin-bottom:0">
+                        <div class="ch">
+                            <div class="tr">
+                                <div class="acc" style="background:var(--gold)"></div>
+                                <div class="ctitle">Target P&L waterfall</div>
+                            </div>
+                        </div>
+                        <div id="m-wf"></div>
+                    </div>
+                    <div class="card" style="margin-bottom:0">
+                        <div class="ch">
+                            <div class="tr">
+                                <div class="acc"></div>
+                                <div class="ctitle">Cost mix</div>
+                            </div>
+                        </div>
+                        <div style="position:relative;width:100%;height:210px">
+                            <canvas id="c-donut">
+                            </canvas>
+                        </div>
+                        <div id="c-legend" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;font-size:11px;color:var(--ink3)"></div>
+                    </div>
+                </div>
+                <div id="save-row" style="display:flex;gap:12px;align-items:center">
+                    <button class="btn btng" id="m-save-btn" onclick="saveTgts()">Save targets to Google Sheet</button>
+                    <span class="sok" id="m-ok">Saved ✓</span>
+                </div>
+            </div>
+
+            <!-- FINANCE -->
+            <div id="view-finance" style="display:none">
+                <div class="synbar">
+                    <span id="s-fin">Not synced</span>
+                    <button class="btn btnsm btno" onclick="loadAll()">↻ Refresh</button>
+                </div>
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px">
+                    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+                        <select class="inp" id="f-month" style="width:auto;font-size:14px">
+                            <option value="01">January</option>
+                            <option value="02">February</option>
+                            <option value="03">March</option>
+                            <option value="04">April</option>
+                            <option value="05">May</option>
+                            <option value="06">June</option>
+                            <option value="07">July</option>
+                            <option value="08">August</option>
+                            <option value="09">September</option>
+                            <option value="10">October</option>
+                            <option value="11">November</option>
+                            <option value="12">December</option>
+                        </select>
+                        <select class="inp" id="f-year" style="width:auto;font-size:14px">
+                            <option>2026</option>
+                            <option>2027</option>
+                            <option>2028</option>
+                        </select>
+                        <button class="btn btno btnsm" onclick="clearFin()">Clear</button>
+                    </div>
+                    <div id="f-live" style="background:var(--panel);border:1.5px solid var(--bd);border-radius:var(--r);padding:10px 16px;font-size:13px;color:var(--ink2);font-family:'DM Mono',monospace">Enter figures to see live P&L</div>
+                </div>
+                <div class="g2" style="margin-bottom:14px">
+                    <div class="card" style="margin-bottom:0">
+                        <div class="ch">
+                            <div class="tr">
+                                <div class="acc"></div>
+                                <div class="ctitle">Sales</div>
+                            </div>
+                        </div>
+                        <div class="fhdr">
+                            <div>Line item</div>
+                            <div style="text-align:right">SAR amount</div>
+                            <div style="text-align:right">% net</div>
+                        </div>
+                        <div class="fr">
+                            <div>
+                                <div class="ml">Gross sales</div>
+                                <div class="ms">Total top-line revenue</div>
+                            </div>
+                            <input class="inp inpr" id="f-gross" type="text" placeholder="0" oninput="fl()">
+                            <div class="mono" id="fd-gross">—</div>
+                        </div>
+                        <div class="fr" style="background:var(--beige2);border-radius:var(--r);padding:12px 10px">
+                            <div>
+                                <div class="ml" style="color:var(--ink3)">VAT + discounts + delivery</div>
+                            </div>
+                            <input class="inp inpr" id="f-vat" type="text" placeholder="0" oninput="fl()">
+                            <div class="mono" id="fd-vat">—</div>
+                        </div>
+                        <div class="nh" style="margin-top:10px">
+                            <div style="display:flex;align-items:center;justify-content:space-between">
+                                <div class="ml" style="color:var(--green);font-size:16px;font-weight:800">Total net sales</div>
+                                <div style="font-size:17px;font-weight:700;color:var(--green);font-family:'DM Mono',monospace" id="fd-net">—</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card" style="margin-bottom:0">
+                        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px">
+                            <div>
+                                <div style="font-size:16px;font-weight:800;margin-bottom:4px">Net profit / loss</div>
+                                <div class="ms">Net sales − total costs</div>
+                                <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap" id="f-badges"></div>
+                            </div>
+                            <div style="text-align:right">
+                                <div style="font-size:30px;font-weight:900;line-height:1" id="f-pval">—</div>
+                                <div style="font-size:13px;margin-top:4px;font-family:'DM Mono',monospace" id="f-ppct">—</div>
+                            </div>
+                        </div>
+                        <div class="pb">
+                            <div id="f-pbar" style="height:100%;border-radius:3px;width:0%;transition:width .3s;background:var(--green)"></div>
+                        </div>
+                        <div style="margin-top:16px" id="f-vtgt"></div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="ch">
+                        <div class="tr">
+                            <div class="acc" style="background:var(--orange);opacity:.7"></div>
+                            <div class="ctitle">Costs & expenses</div>
+                        </div>
+                    </div>
+                    <div class="fhdr">
+                        <div>Line item</div>
+                        <div style="text-align:right">SAR amount</div>
+                        <div style="text-align:right">% net</div>
+                    </div>
+                    <div id="f-cost-rows"></div>
+                    <div class="fr" style="border-top:1.5px solid var(--bd2);margin-top:4px;padding-top:13px">
+                        <div class="ml" style="font-size:16px;color:var(--ink2)">Total costs</div>
+                        <div class="mono" style="font-weight:700;color:var(--ink2);font-size:15px" id="fd-tc">—</div>
+                        <div class="mono" id="fd-tcp">—</div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="ch">
+                        <div class="ctitle">Notes</div>
+                    </div>
+                    <textarea class="inp" id="f-notes" placeholder="Optional: Ramadan effect, one-off costs, promotions..."></textarea>
+                    <div style="display:flex;gap:12px;margin-top:14px;align-items:center">
+                        <button class="btn btng" id="f-save-btn" onclick="saveMonth()">Save to Google Sheet</button>
+                        <span class="sok" id="f-ok">Saved ✓</span>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="ch">
+                        <div class="tr">
+                            <div class="acc" style="background:var(--gold)"></div>
+                            <div class="ctitle">Saved records</div>
+                        </div>
+                        <button class="btn btnsm btno" onclick="expCSV()">Export CSV</button>
+                    </div>
+                    <div id="f-hist"></div>
+                </div>
+            </div>
+
+            <!-- OPERATIONS -->
+            <div id="view-ops" style="display:none">
+                <div class="synbar">
+                    <span id="s-ops">Not synced</span>
+                    <button class="btn btnsm btno" onclick="loadAll()">↻ Refresh</button>
+                </div>
+                <div id="ops-wallet" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:12px;margin-bottom:20px">
+                    <div style="font-size:13px;color:var(--ink3);padding:10px 0;grid-column:1/-1">No data yet.</div>
+                </div>
+
+                <div class="g2" style="margin-bottom:20px">
+                    <div class="card" style="margin-bottom:0">
+                        <div class="ch">
+                            <div class="tr">
+                                <div class="acc"></div>
+                                <div class="ctitle">Monthly net profit / loss</div>
+                            </div>
+                        </div>
+                        <div style="display:flex;gap:12px;margin-bottom:8px;font-size:11px;color:var(--ink3)">
+                            <span style="display:flex;align-items:center;gap:4px">
+                                <span style="width:10px;height:10px;border-radius:2px;background:#00664C;display:inline-block"></span>
+                                Profit
+                            </span>
+                            <span style="display:flex;align-items:center;gap:4px">
+                                <span style="width:10px;height:10px;border-radius:2px;background:#b83232;display:inline-block"></span>
+                                Loss
+                            </span>
+                        </div>
+                        <div style="position:relative;width:100%;height:195px">
+                            <canvas id="c-profit">
+                            </canvas>
+                        </div>
+                    </div>
+                    <div class="card" style="margin-bottom:0">
+                        <div class="ch">
+                            <div class="tr">
+                                <div class="acc" style="background:var(--gold)"></div>
+                                <div class="ctitle">Actual vs target costs (latest month)</div>
+                            </div>
+                        </div>
+                        <div style="display:flex;gap:12px;margin-bottom:8px;font-size:11px;color:var(--ink3)">
+                            <span style="display:flex;align-items:center;gap:4px">
+                                <span style="width:10px;height:10px;border-radius:2px;background:#F37829;display:inline-block"></span>
+                                Actual %
+                            </span>
+                            <span style="display:flex;align-items:center;gap:4px">
+                                <span style="width:10px;height:10px;border-radius:2px;background:rgba(0,102,76,.3);border:1px solid #00664C;display:inline-block"></span>
+                                Target %
+                            </span>
+                        </div>
+                        <div style="position:relative;width:100%;height:195px">
+                            <canvas id="c-cost">
+                            </canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- COST PERFORMANCE BREAKDOWN -->
+                <div class="card" id="wallet-breakdown" style="display:none;margin-bottom:20px">
+                    <div class="ch">
+                        <div class="tr">
+                            <div class="acc" style="background:var(--gold)"></div>
+                            <div class="ctitle">Cost performance wallet — breakdown by month & item</div>
+                        </div>
+                    </div>
+                    <div class="oscroll">
+                        <div id="wb-wrap"></div>
+                    </div>
+                </div>
+                <div class="stabs">
+                    <button class="stab active" onclick="swOps('monthly',this)">Monthly detail</button>
+                    <button class="stab" onclick="swOps('allmonths',this)">All months</button>
+                </div>
+                <div id="ops-monthly">
+                    <div class="card" style="padding:14px 20px;margin-bottom:14px">
+                        <div class="ctitle" style="margin-bottom:10px">Select month</div>
+                        <div style="display:flex;gap:8px;flex-wrap:wrap" id="ops-pills">
+                            <div style="font-size:13px;color:var(--ink3)">No records yet.</div>
+                        </div>
+                    </div>
+                    <div class="g4" id="ops-kpi" style="margin-bottom:14px"></div>
+                    <div class="card" id="ops-plc" style="display:none">
+                        <div class="ch">
+                            <div style="font-size:16px;font-weight:800" id="ops-mtitle">—</div>
+                            <div style="display:flex;gap:8px">
+                                <span class="badge bg" style="font-size:10px">+SAR under budget</span>
+                                <span class="badge br" style="font-size:10px">-SAR over budget</span>
+                            </div>
+                        </div>
+                        <div style="overflow-x:auto">
+                            <table class="optbl" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th style="width:30%">Line item</th>
+                                        <th class="r">Actual (SAR)</th>
+                                        <th class="r">% of net</th>
+                                        <th class="r">Target (SAR)</th>
+                                        <th class="r">Ref</th>
+                                        <th class="r">Performance</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="ops-plbody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div id="ops-allmonths" style="display:none">
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+                        <span style="font-size:12px;color:var(--ink3);font-family:'DM Mono',monospace" id="ops-cnt">—</span>
+                        <div style="display:flex;gap:8px">
+                            <span class="badge bg" style="font-size:10px">+SAR under budget</span>
+                            <span class="badge br" style="font-size:10px">-SAR over budget</span>
+                        </div>
+                    </div>
+                    <div class="card" style="padding:0;overflow:hidden">
+                        <div class="oscroll">
+                            <div id="ops-tbl">
+                                <div style="padding:40px;text-align:center;font-size:13px;color:var(--ink3)">No records yet.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
 
-<script>
-let ROLE=null,PW=null,API=null;
-let T={name:'Pakka Indian Kitchen',grossTarget:600000,pGross:120,pVat:20,cogsPct:30,rentPct:6,laborPct:25,maintPct:3,mktgPct:5,depPct:5,sharedPct:6,profitPct:20};
-let recs=[],selKey=null,donutCh=null,profCh=null,costCh=null;
-const ML=['January','February','March','April','May','June','July','August','September','October','November','December'];
-const CD=[
-  {id:'cogs',label:'Total COGS',sub:'Food & beverage',ref:'pct',tKey:'cogsPct',color:'#00664C'},
-  {id:'rent',label:'Rent',sub:'Occupancy',ref:'sar',tKey:'rentPct',color:'#B8984B'},
-  {id:'labor',label:'Labor, transport & acco.',sub:'Staff costs',ref:'sar',tKey:'laborPct',color:'#F37829'},
-  {id:'maint',label:'Maintenance, util. & sw.',sub:'Overhead',ref:'sar',tKey:'maintPct',color:'#378ADD'},
-  {id:'mktg',label:'Marketing',sub:'Advertising',ref:'pct',tKey:'mktgPct',color:'#D4537E'},
-  {id:'dep',label:'Depreciation',sub:'Assets',ref:'sar',tKey:'depPct',color:'#888780'},
-  {id:'shared',label:'Shared services',sub:'Head office',ref:'sar',tKey:'sharedPct',color:'#5DCAA5'},
-];
-const fn=n=>'SAR '+Math.round(Math.abs(n)).toLocaleString();
-const fs=n=>(n<0?'-':'')+fn(n);
-const pc=(a,b)=>b>0?Math.round(a/b*1000)/10:0;
-const vv=id=>parseFloat((document.getElementById(id)?.value||'').replace(/,/g,''))||0;
-const el=id=>document.getElementById(id);
-const isMgmt=()=>ROLE==='management';
-const isFin=()=>ROLE==='finance';
-function getTgtSAR(d,net){return d.ref==='pct'?Math.round(net*T[d.tKey]/100):Math.round(T.grossTarget*(100/T.pGross)*T[d.tKey]/100);}
-function perfCost(ac,tgt){const d=Math.round(tgt-ac),g=d>=0;return `<span class="badge ${g?'bg':'br'}">${g?'+':'-'}SAR ${Math.abs(d).toLocaleString()}</span>`;}
-function perfProfit(ac,tgt){const d=Math.round(ac-tgt),g=d>=0;return `<span class="badge ${g?'bg':'br'}">${g?'+':'-'}SAR ${Math.abs(d).toLocaleString()}</span>`;}
-function costWallet(r){let w=0;CD.forEach(d=>{w+=getTgtSAR(d,r.net)-r[d.id];});return Math.round(w);}
+    <script>
+    let ROLE = null,
+        PW = null,
+        API = null;
+    let T = {
+        name: 'Pakka Indian Kitchen',
+        grossTarget: 600000,
+        pGross: 120,
+        pVat: 20,
+        cogsPct: 30,
+        rentPct: 6,
+        laborPct: 25,
+        maintPct: 3,
+        mktgPct: 5,
+        depPct: 5,
+        sharedPct: 6,
+        profitPct: 20
+    };
+    let recs = [],
+        selKey = null,
+        donutCh = null,
+        profCh = null,
+        costCh = null;
+    const ML = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    const CD = [
+    {
+        id: 'cogs',
+        label: 'Total COGS',
+        sub: 'Food & beverage',
+        ref: 'pct',
+        tKey: 'cogsPct',
+        color: '#00664C'
+    },
+    {
+        id: 'rent',
+        label: 'Rent',
+        sub: 'Occupancy',
+        ref: 'sar',
+        tKey: 'rentPct',
+        color: '#B8984B'
+    },
+    {
+        id: 'labor',
+        label: 'Labor, transport & acco.',
+        sub: 'Staff costs',
+        ref: 'sar',
+        tKey: 'laborPct',
+        color: '#F37829'
+    },
+    {
+        id: 'maint',
+        label: 'Maintenance, util. & sw.',
+        sub: 'Overhead',
+        ref: 'sar',
+        tKey: 'maintPct',
+        color: '#378ADD'
+    },
+    {
+        id: 'mktg',
+        label: 'Marketing',
+        sub: 'Advertising',
+        ref: 'pct',
+        tKey: 'mktgPct',
+        color: '#D4537E'
+    },
+    {
+        id: 'dep',
+        label: 'Depreciation',
+        sub: 'Assets',
+        ref: 'sar',
+        tKey: 'depPct',
+        color: '#888780'
+    },
+    {
+        id: 'shared',
+        label: 'Shared services',
+        sub: 'Head office',
+        ref: 'sar',
+        tKey: 'sharedPct',
+        color: '#5DCAA5'
+    },
+    ];
+    const fn = n => 'SAR ' + Math.round(Math.abs(n)).toLocaleString();
+    const fs = n => (n < 0 ? '-' : '') + fn(n);
+    const pc = (a, b) => b > 0 ? Math.round(a / b * 1000) / 10 : 0;
 
-window.addEventListener('load',()=>{try{const u=localStorage.getItem('pakka_url');if(u)el('api-url').value=u;}catch(e){}});
+    // FIX 1: strip commas before parsing
+    const vv = id => parseFloat((document.getElementById(id)?.value || '').replace(/,/g, '')) || 0;
 
-// ── DIRECT FETCH — works perfectly from a local HTML file (no CORS) ───────────
-async function callAPI(action, extra={}) {
-  const params = new URLSearchParams({action, password: PW, ...extra});
-  const res = await fetch(API + '?' + params.toString());
-  const txt = await res.text();
-  try { return JSON.parse(txt); }
-  catch(e) { throw new Error('Bad response from server.'); }
-}
+    const el = id => document.getElementById(id);
+    const isMgmt = () => ROLE === 'management';
+    const isFin = () => ROLE === 'finance';
+    function getTgtSAR(d, net) {
+        return d.ref === 'pct' ? Math.round(net * T[d.tKey] / 100) : Math.round(T.grossTarget * (100 / T.pGross) * T[d.tKey] / 100);
+    }
+    function perfCost(ac, tgt) {
+        const d = Math.round(tgt - ac),
+            g = d >= 0;
+        return `<span class="badge ${g ? 'bg' : 'br'}">${g ? '+' : '-'}SAR ${Math.abs(d).toLocaleString()}</span>`;
+    }
+    function perfProfit(ac, tgt) {
+        const d = Math.round(ac - tgt),
+            g = d >= 0;
+        return `<span class="badge ${g ? 'bg' : 'br'}">${g ? '+' : '-'}SAR ${Math.abs(d).toLocaleString()}</span>`;
+    }
+    function costWallet(r) {
+        let w = 0;
+        CD.forEach(d => {
+            w += getTgtSAR(d, r.net) - r[d.id];
+        });
+        return Math.round(w);
+    }
 
-async function doLogin(){
-  const url=el('api-url').value.trim(),pw=el('login-pw').value.trim();
-  el('lerr').textContent='';
-  if(!url){el('lerr').textContent='Please paste your Apps Script URL.';return;}
-  if(!pw){el('lerr').textContent='Please enter your password.';return;}
-  const btn=el('lbtn');btn.disabled=true;btn.textContent='Signing in…';
-  API=url;PW=pw;
-  try{
-    const res=await callAPI('login');
-    if(!res.ok){el('lerr').textContent=res.error||'Invalid password.';btn.disabled=false;btn.textContent='Sign in';API=null;PW=null;return;}
-    ROLE=res.role;try{localStorage.setItem('pakka_url',url);}catch(e){}
-    startApp();
-  }catch(err){el('lerr').textContent=err.message;btn.disabled=false;btn.textContent='Sign in';API=null;PW=null;}
-}
-function logout(){ROLE=null;PW=null;API=null;el('login-screen').style.display='flex';el('main-app').style.display='none';el('login-pw').value='';el('lerr').textContent='';el('lbtn').disabled=false;el('lbtn').textContent='Sign in';}
-async function startApp(){
-  el('login-screen').style.display='none';el('main-app').style.display='block';
-  const labels={management:'🔧 Management',finance:'💰 Finance',operations:'👁 Operations'};
-  el('rbadge').textContent=labels[ROLE]||ROLE;
-  buildMgmtRows();buildFinRows();applyPerms();
-  el('f-month').value=String(new Date().getMonth()+1).padStart(2,'0');
-  await loadAll();setTimeout(buildDonut,200);
-}
-function applyPerms(){
-  el('ro-banner').style.display=isMgmt()?'none':'flex';el('save-row').style.display=isMgmt()?'flex':'none';
-  setTimeout(()=>{['m-name','m-gross','m-p-gross','m-p-vat'].forEach(id=>{const e=el(id);if(e)e.disabled=!isMgmt();});CD.forEach(d=>{const e=el('m-p-'+d.id);if(e)e.disabled=!isMgmt();});},100);
-  el('f-save-btn').disabled=!isFin();
-}
-function setSyncDot(ok){const d=el('sdot');if(d)d.className='sdot'+(ok?'':' off');}
-function setSyncTime(){const ts=new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',second:'2-digit'});['s-mgmt','s-fin','s-ops'].forEach(id=>{const e=el(id);if(e)e.textContent='Last synced: '+ts;});}
-async function loadAll(){
-  setSyncDot(true);
-  try{
-    const res=await callAPI('getAll');if(!res.ok){setSyncDot(false);return;}
-    if(res.data.targets)T=res.data.targets;recs=res.data.records||[];setSyncTime();
-    el('m-name').value=T.name||'';el('m-gross').value=T.grossTarget||'';el('m-p-gross').value=T.pGross||120;el('m-p-vat').value=T.pVat||20;
-    CD.forEach(d=>{const e=el('m-p-'+d.id);if(e)e.value=T[d.tKey]||0;});
-    applyPerms();ml();renderHist();renderOps();
-    if(recs.length){el('tab-finance').classList.add('has-data');el('tab-ops').classList.add('has-data');if(!selKey)selKey=recs[recs.length-1].key;}
-    setSyncDot(true);
-  }catch(err){setSyncDot(false);}
-}
-function sw(name,btn){['mgmt','finance','ops'].forEach(t=>{el('view-'+t).style.display=t===name?'block':'none';});document.querySelectorAll('.ntab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');if(name==='ops'){renderOps();setTimeout(buildOpsCharts,150);}if(name==='mgmt')setTimeout(buildDonut,150);}
-function swOps(name,btn){el('ops-monthly').style.display=name==='monthly'?'block':'none';el('ops-allmonths').style.display=name==='allmonths'?'block':'none';document.querySelectorAll('.stab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');if(name==='allmonths')renderAll();}
-function buildMgmtRows(){el('m-cost-rows').innerHTML=CD.map(d=>`<div class="mr"><div><div class="ml">${d.label}</div><div class="ms">${d.sub}</div></div><div><input class="inp inpr" id="m-p-${d.id}" type="number" value="${T[d.tKey]||0}" style="width:84px" oninput="ml()"></div><div class="mono" id="m-s-${d.id}">—</div><div style="text-align:right"><span class="tag ${d.ref==='pct'?'tp':'ts'}">${d.ref==='pct'?'% ref':'SAR ref'}</span></div></div>`).join('');}
-function ml(){
-  const gT=vv('m-gross'),pG=vv('m-p-gross')||120,pV=vv('m-p-vat')||20,nS=gT>0?gT*(100/pG):0;
-  el('m-s-gross').textContent=gT>0?fn(gT):'—';el('m-s-vat').textContent=gT>0?fn(gT*(pV/pG)):'—';el('m-s-net').textContent=gT>0?fn(nS):'—';
-  let tot=0;CD.forEach(d=>{const p=vv('m-p-'+d.id);tot+=p;el('m-s-'+d.id).textContent=(gT>0&&p>0)?fn(nS*p/100):'—';});
-  const pr=Math.round((100-tot)*10)/10;
-  el('m-pp').textContent=pr+'%';el('m-pp').style.color=pr>=0?'var(--green)':'var(--red)';
-  el('m-ps').textContent=gT>0?fs(nS*pr/100):'—';el('m-ps').style.color=pr>=0?'var(--green)':'var(--red)';
-  const b=el('m-badge');
-  if(Math.abs(pr-20)<0.5){b.textContent='Balanced at 20%';b.className='badge bg';}else if(pr<0){b.textContent='Over 100%';b.className='badge br';}else if(pr<10){b.textContent=pr+'% profit';b.className='badge bo';}else{b.textContent=pr+'% profit';b.className='badge bgold';}
-  el('m-prog').style.width=Math.min(100,Math.abs(pr)*2)+'%';el('m-prog').style.background=pr>=0?'var(--green)':'var(--red)';
-  el('m-prev').textContent=pr>=0?'Net profit: '+pr+'% of net sales':'Warning: costs exceed 100%';
-  buildWf(pr,nS);buildDonut();
-}
-function buildWf(pp,nS){const items=[{label:'Net sales',p:100,c:'#00664C'},...CD.map(d=>({label:d.label.split(',')[0],p:vv('m-p-'+d.id),c:d.color})),{label:'Net profit',p:Math.max(0,pp),c:pp>=0?'#005240':'#b83232'}];el('m-wf').innerHTML=items.map(it=>`<div class="wfr"><div class="wfl">${it.label}</div><div class="wft"><div class="wff" style="width:${Math.min(100,it.p)}%;background:${it.c};color:#fff">${it.p>12?it.p+'%':''}</div></div><div class="wfp">${it.p<=12?it.p+'%':''}</div></div>`).join('');}
-function buildDonut(){
-  const data=CD.map(d=>vv('m-p-'+d.id)),labels=CD.map(d=>d.label.split(',')[0]),colors=CD.map(d=>d.color);
-  const pr=Math.round((100-data.reduce((a,b)=>a+b,0))*10)/10;
-  if(pr>0){data.push(pr);labels.push('Net profit');colors.push('#2d9e6b');}
-  if(donutCh)donutCh.destroy();const ctx=el('c-donut');if(!ctx)return;
-  donutCh=new Chart(ctx,{type:'doughnut',data:{labels,datasets:[{data,backgroundColor:colors,borderWidth:2,borderColor:'#FFFDF8'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.label+': '+c.parsed+'%'}}},cutout:'62%'}});
-  el('c-legend').innerHTML=labels.map((l,i)=>`<span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:2px;background:${colors[i]};display:inline-block"></span>${l} ${data[i]}%</span>`).join('');
-}
-async function saveTgts(){
-  if(!isMgmt())return;
-  T.name=el('m-name').value||T.name;T.grossTarget=vv('m-gross')||T.grossTarget;T.pGross=vv('m-p-gross')||T.pGross;T.pVat=vv('m-p-vat')||T.pVat;
-  CD.forEach(d=>{T[d.tKey]=vv('m-p-'+d.id)||T[d.tKey];});T.profitPct=Math.round((100-CD.reduce((s,d)=>s+T[d.tKey],0))*10)/10;
-  const btn=el('m-save-btn');btn.disabled=true;btn.textContent='Saving…';
-  try{const res=await callAPI('saveTargets',{payload:JSON.stringify(T)});if(res.ok){el('m-ok').style.display='inline';el('tab-mgmt').classList.add('has-data');setTimeout(()=>el('m-ok').style.display='none',3000);}else alert('Save failed: '+res.error);}catch(e){alert(e.message);}
-  btn.disabled=false;btn.textContent='Save targets to Google Sheet';
-}
-function buildFinRows(){el('f-cost-rows').innerHTML=CD.map(d=>`<div class="fr"><div><div class="ml">${d.label}</div><div class="ms">${d.sub}</div></div><input class="inp inpr" id="f-${d.id}" type="number" placeholder="0" oninput="fl()"><div class="mono" id="fd-${d.id}">—</div></div>`).join('');}
-function fl(){
-  const g=vv('f-gross'),va=vv('f-vat'),n=g-va;
-  el('fd-gross').textContent=n>0?pc(g,n)+'%':'—';el('fd-vat').textContent=n>0?pc(va,n)+'%':'—';el('fd-net').textContent=n>0?fn(n):'—';
-  let tc=0;CD.forEach(d=>{const val=vv('f-'+d.id);tc+=val;el('fd-'+d.id).textContent=(n>0&&val>0)?pc(val,n)+'%':'—';});
-  el('fd-tc').textContent=tc>0?fn(tc):'—';el('fd-tcp').textContent=(n>0&&tc>0)?pc(tc,n)+'%':'—';
-  const pr=n-tc,pp=n>0?pc(pr,n):0,gd=pr>=0;
-  el('f-pval').textContent=n>0?fs(pr):'—';el('f-pval').style.color=gd?'var(--green)':'var(--red)';
-  el('f-ppct').textContent=n>0?pp+'% margin':'';el('f-ppct').style.color=gd?'var(--green)':'var(--red)';
-  el('f-pbar').style.width=n>0?Math.min(100,Math.abs(pp)*2)+'%':'0%';el('f-pbar').style.background=gd?'var(--green)':'var(--red)';
-  const df=Math.round((pp-T.profitPct)*10)/10;
-  if(n>0){
-    el('f-badges').innerHTML=`<span class="badge ${df>=0?'bg':'br'}">${df>=0?'+':'-'}${Math.abs(df)}% vs target</span><span class="badge ${pp>=20?'bg':pp>=10?'bgold':'br'}">${pp}% margin</span>`;
-    el('f-live').innerHTML=`${ML[parseInt(el('f-month').value)-1]} ${el('f-year').value} | Net: <strong style="color:var(--green)">${fn(n)}</strong> | P/L: <strong style="color:${gd?'var(--green)':'var(--red)'}">${fs(pr)}</strong>`;
-    const bars=CD.map(d=>{const ac=vv('f-'+d.id),tgt=getTgtSAR(d,n),diff=tgt-ac,good=diff>=0;return `<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px"><div style="font-size:12px;color:var(--ink3);width:100px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${d.label.split(',')[0]}</div><div style="flex:1;height:6px;background:var(--beige3);border-radius:3px;overflow:hidden"><div style="height:100%;width:${Math.min(100,tgt>0?Math.round(ac/tgt*100):0)}%;background:${good?'#00664C':'#b83232'};border-radius:3px"></div></div><span class="badge ${good?'bg':'br'}" style="font-size:9px;padding:2px 6px">${good?'+':'-'}SAR ${Math.abs(diff).toLocaleString()}</span></div>`;}).join('');
-    el('f-vtgt').innerHTML=`<div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink4);margin-bottom:8px">Live cost performance vs targets</div>${bars}`;
-  }else{el('f-badges').innerHTML='';el('f-live').innerHTML='Enter figures to see live P&L';el('f-vtgt').innerHTML='';}
-}
-async function saveMonth(){
-  if(!isFin())return;
-  const mo=el('f-month').value,yr=el('f-year').value,g=vv('f-gross'),va=vv('f-vat');
-  if(!g){alert('Please enter gross sales.');return;}
-  const n=g-va;let tc=0;const co={};CD.forEach(d=>{co[d.id]=vv('f-'+d.id);tc+=co[d.id];});
-  const pr=n-tc,pp=n>0?pc(pr,n):0,key=yr+'-'+mo;
-  const rec={key,month:mo,year:yr,label:ML[parseInt(mo)-1]+' '+yr,gross:g,vat:va,net:n,...co,totalCost:tc,profit:pr,profitPct:pp,notes:el('f-notes').value};
-  const btn=el('f-save-btn');btn.disabled=true;btn.textContent='Saving…';
-  try{const res=await callAPI('saveRecord',{payload:JSON.stringify(rec)});if(res.ok){const idx=recs.findIndex(r=>r.key===key);if(idx>=0)recs[idx]=rec;else recs.push(rec);recs.sort((a,b)=>a.key.localeCompare(b.key));renderHist();el('tab-finance').classList.add('has-data');el('tab-ops').classList.add('has-data');el('f-ok').style.display='inline';setTimeout(()=>el('f-ok').style.display='none',3000);}else alert('Save failed: '+res.error);}catch(e){alert(e.message);}
-  btn.disabled=false;btn.textContent='Save to Google Sheet';
-}
-function clearFin(){['f-gross','f-vat'].forEach(id=>el(id).value='');CD.forEach(d=>el('f-'+d.id).value='');el('f-notes').value='';fl();}
-async function delRec(key){
-  if(!isFin())return;const r=recs.find(x=>x.key===key);if(!r||!confirm(`Delete ${r.label}?`))return;
-  try{const res=await callAPI('deleteRecord',{payload:JSON.stringify({key})});if(res.ok){recs=recs.filter(x=>x.key!==key);if(selKey===key)selKey=recs.length?recs[recs.length-1].key:null;renderHist();}else alert('Delete failed: '+res.error);}catch(e){alert(e.message);}
-}
-function renderHist(){
-  const w=el('f-hist');if(!recs.length){w.innerHTML='<div style="font-size:13px;color:var(--ink3);padding:8px 0">No records yet.</div>';return;}
-  w.innerHTML=`<table class="htbl"><thead><tr><th>Month</th><th class="r">Gross</th><th class="r">Net</th><th class="r">Net P/L</th><th class="r">Margin</th><th class="r">Actions</th></tr></thead><tbody>
-  ${recs.map(r=>`<tr><td><strong style="font-size:14px">${r.label}</strong>${r.notes?`<div style="font-size:11px;color:var(--ink3);margin-top:2px">${r.notes.substring(0,50)}</div>`:''}</td><td class="r" style="font-family:'DM Mono',monospace;font-size:13px">${fn(r.gross)}</td><td class="r" style="font-family:'DM Mono',monospace;font-size:13px">${fn(r.net)}</td><td class="r"><span class="badge ${r.profit>=0?'bg':'br'}">${r.profit>=0?'+':'-'}${fn(r.profit)}</span></td><td class="r"><span class="badge ${r.profitPct>=20?'bg':r.profitPct>=10?'bgold':'br'}">${r.profitPct}%</span></td><td class="r" style="white-space:nowrap">${isFin()?`<button class="btn btnsm btno" onclick="loadRec('${r.key}')">Edit</button><button class="btn btnsm btndel" onclick="delRec('${r.key}')">Delete</button>`:`<span style="font-size:11px;color:var(--ink4)">View only</span>`}</td></tr>`).join('')}</tbody></table>`;
-}
-function loadRec(key){const r=recs.find(x=>x.key===key);if(!r)return;el('f-month').value=r.month;el('f-year').value=r.year;el('f-gross').value=r.gross||'';el('f-vat').value=r.vat||'';CD.forEach(d=>el('f-'+d.id).value=r[d.id]||'');el('f-notes').value=r.notes||'';fl();}
-function expCSV(){if(!recs.length){alert('No records.');return;}const h=['Month','Year','Gross','VAT','Net','COGS','Rent','Labor','Maint','Mktg','Dep','Shared','Total','P/L','Margin%','Notes'];const rows=recs.map(r=>[r.label.split(' ')[0],r.year,r.gross,r.vat,r.net,r.cogs,r.rent,r.labor,r.maint,r.mktg,r.dep,r.shared,r.totalCost,r.profit,r.profitPct,'"'+(r.notes||'')+'"']);const csv=[h.join(','),...rows.map(r=>r.join(','))].join('\n');const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);a.download='pakka.csv';a.click();}
-function renderOps(){renderWallet();renderPills();if(selKey)renderDetail();}
-function renderWallet(){
-  const w=el('ops-wallet');if(!recs.length){w.innerHTML='<div style="font-size:13px;color:var(--ink3);padding:10px 0;grid-column:1/-1">No data yet.</div>';return;}
-  const tP=recs.reduce((s,r)=>s+r.profit,0),tD=recs.reduce((s,r)=>s+r.dep,0),tN=recs.reduce((s,r)=>s+r.net,0),tG=recs.reduce((s,r)=>s+r.gross,0);
-  const wa=recs.reduce((s,r)=>s+costWallet(r),0);const n=recs.length,am=tN>0?Math.round(tP/tN*1000)/10:0;
-  w.innerHTML=`<div class="wc ${tP>=0?'wg':'wr'}"><div class="wl">Accumulated profit</div><div class="wv">${fs(tP)}</div><div class="ws">${n} months · avg ${am}% margin</div></div><div class="wc wb"><div class="wl">Total depreciation</div><div class="wv">${fn(tD)}</div><div class="ws">Asset recovery reserve</div></div><div class="wc ${wa>=0?'wg':'wr'}"><div class="wl">Cost performance wallet</div><div class="wv">${wa>=0?'+':'-'}SAR ${Math.abs(wa).toLocaleString()}</div><div class="ws">${wa>=0?'Saved on costs vs targets':'Overspent on costs'} · ${n} mo.</div></div><div class="wc wgold"><div class="wl">Total net sales</div><div class="wv">${fn(tN)}</div><div class="ws">From ${fn(tG)} gross</div></div>`;
-}
-function buildOpsCharts(){
-  if(!recs.length)return;
-  if(profCh)profCh.destroy();const ctx1=el('c-profit');if(!ctx1)return;
-  profCh=new Chart(ctx1,{type:'bar',data:{labels:recs.map(r=>r.label.replace(' 20',"'")),datasets:[{label:'Net P/L',data:recs.map(r=>Math.round(r.profit)),backgroundColor:recs.map(r=>r.profit>=0?'#00664C':'#b83232'),borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>fs(c.parsed.y)}}},scales:{y:{ticks:{callback:v=>'SAR '+(Math.abs(v)/1000).toFixed(0)+'k',font:{size:10}},grid:{color:'rgba(0,0,0,.05)'}},x:{ticks:{font:{size:10},autoSkip:false},grid:{display:false}}}}});
-  if(costCh)costCh.destroy();const ctx2=el('c-cost');if(!ctx2)return;
-  const lr=recs[recs.length-1],net=lr.net;
-  costCh=new Chart(ctx2,{type:'bar',data:{labels:CD.map(d=>d.label.split(',')[0]),datasets:[{label:'Actual %',data:CD.map(d=>Math.round(lr[d.id]/net*100*10)/10),backgroundColor:'#F37829',borderRadius:3},{label:'Target %',data:CD.map(d=>T[d.tKey]),backgroundColor:'rgba(0,102,76,.28)',borderRadius:3,borderWidth:1,borderColor:'#00664C'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.dataset.label+': '+c.parsed.y+'%'}}},scales:{x:{ticks:{font:{size:9},maxRotation:40,autoSkip:false},grid:{display:false}},y:{ticks:{callback:v=>v+'%',font:{size:10}},grid:{color:'rgba(0,0,0,.05)'}}}}});
-}
-function renderPills(){const w=el('ops-pills');if(!recs.length){w.innerHTML='<div style="font-size:13px;color:var(--ink3)">No records yet.</div>';return;}w.innerHTML=recs.map(r=>`<button class="mpill${r.key===selKey?' active':''}" onclick="selMo('${r.key}')">${r.label}</button>`).join('');}
-function selMo(key){selKey=key;renderPills();renderDetail();}
-function renderDetail(){
-  const r=recs.find(x=>x.key===selKey);if(!r){el('ops-plc').style.display='none';el('ops-kpi').innerHTML='';return;}
-  el('ops-plc').style.display='block';el('ops-mtitle').textContent=r.label;const net=r.net,pg=r.profit>=0;
-  el('ops-kpi').innerHTML=`<div class="kpi"><div class="kl">Gross sales</div><div class="kv">${fn(r.gross)}</div><div class="ks">${pc(r.net,r.gross)}% net ratio</div></div><div class="kpi"><div class="kl">Net sales</div><div class="kv">${fn(net)}</div><div class="ks">After deductions</div></div><div class="kpi"><div class="kl">Total costs</div><div class="kv">${fn(r.totalCost)}</div><div class="ks">${pc(r.totalCost,net)}% of net</div></div><div class="kpi"><div class="kl">Net profit / loss</div><div class="kv" style="color:${pg?'var(--green)':'var(--red)'}">${fs(r.profit)}</div><div class="ks" style="color:${pg?'var(--green)':'var(--red)'}">${r.profitPct}% margin</div></div>`;
-  const rows=[{label:'Gross sales',sub:'Top-line',sar:r.gross,p:pc(r.gross,net),tgtSAR:null},{label:'VAT + discounts',sub:'Deductions',sar:r.vat,p:pc(r.vat,net),tgtSAR:null,indent:true},{label:'Total net sales',sub:'Base = 100%',sar:net,p:100,tgtSAR:null,rt:'rn'},...CD.map(d=>({label:d.label,sub:d.sub,sar:r[d.id],p:pc(r[d.id],net),tgtSAR:getTgtSAR(d,net),refType:d.ref,perf:perfCost(r[d.id],getTgtSAR(d,net))})),{label:'Total costs',sub:'',sar:r.totalCost,p:pc(r.totalCost,net),tgtSAR:null,rt:'rt'},{label:'Net profit / loss',sub:'',sar:r.profit,p:r.profitPct,tgtSAR:Math.round(net*T.profitPct/100),isProfit:true,rt:'rp',perf:perfProfit(r.profit,Math.round(net*T.profitPct/100))}];
-  el('ops-plbody').innerHTML=rows.map(row=>{const sc=row.isProfit?(row.sar>=0?'color:var(--green)':'color:var(--red)'):'';const tgtD=row.tgtSAR==null?'—':fn(row.tgtSAR);const rtTag=row.refType?`<span class="tag ${row.refType==='pct'?'tp':'ts'}">${row.refType==='pct'?'% of net':'Fixed SAR'}</span>`:(row.isProfit?`<span class="tag tp">% of net</span>`:'');return `<tr class="${row.rt||''}"><td${row.indent?' class="indent"':''}><div style="font-size:13px${row.indent?';color:var(--ink3)':''}">${row.label}</div>${row.sub?`<div style="font-size:11px;color:var(--ink3)">${row.sub}</div>`:''}</td><td class="r" style="${sc};font-family:'DM Mono',monospace;font-size:13px">${fs(row.sar)}</td><td class="r" style="font-family:'DM Mono',monospace;font-size:12px;color:var(--ink3)">${row.p}%</td><td class="r" style="font-family:'DM Mono',monospace;font-size:12px;color:var(--ink2)">${tgtD}</td><td class="r">${rtTag}</td><td class="r">${row.perf||'—'}</td></tr>`;}).join('');
-}
-function renderAll(){
-  const w=el('ops-tbl'),ce=el('ops-cnt');if(!recs.length){w.innerHTML='<div style="padding:40px;text-align:center;font-size:13px;color:var(--ink3)">No records yet.</div>';ce.textContent='No records';return;}
-  ce.textContent=recs.length+' month'+(recs.length>1?'s':'')+' recorded';
-  const rDefs=[{key:'gross',label:'Gross sales',sub:'Top-line',getValue:r=>r.gross,getTgt:null},{key:'vat',label:'VAT + discounts',sub:'Deductions',getValue:r=>r.vat,getTgt:null,indent:true},{key:'_net',label:'Total net sales',sub:'Base = 100%',getValue:r=>r.net,getTgt:null,rt:'rn'},...CD.map(d=>({key:d.id,label:d.label,sub:d.sub,getValue:r=>r[d.id],d,rt:''})),{key:'_tc',label:'Total costs',sub:'',getValue:r=>r.totalCost,getTgt:null,rt:'rt'},{key:'_profit',label:'Net profit / loss',sub:'',getValue:r=>r.profit,isProfit:true,rt:'rp'},{key:'_perf',label:'Cost performance',sub:'cost savings vs targets',isPerf:true,rt:'rperf'}];
-  let th=`<tr><th class="lh">Line item</th>`;recs.forEach(r=>{th+=`<th style="min-width:140px">${r.label.replace(' 20',"'")}</th>`;});th+=`</tr>`;
-  let tb='';rDefs.forEach(row=>{tb+=`<tr class="${row.rt||''}"><td class="lc${row.indent?' indent':''}">${row.label}<div style="font-size:10px;color:var(--ink3)">${row.sub||''}</div></td>`;recs.forEach(r=>{const net=r.net;if(row.isPerf){const wa=costWallet(r),gd=wa>=0;tb+=`<td><span class="badge ${gd?'bg':'br'}">${gd?'+':'-'}SAR ${Math.abs(wa).toLocaleString()}</span></td>`;}else if(row.d){const ac=row.getValue(r),p=pc(ac,net),tgt=getTgtSAR(row.d,net),diff=tgt-ac,gd=diff>=0;tb+=`<td><div style="font-family:'DM Mono',monospace;font-size:11px">${fn(ac)}</div><div style="color:var(--ink3);font-size:10px;margin-top:1px">${p}%</div><div style="margin-top:3px"><span class="badge ${gd?'bg':'br'}" style="font-size:10px">${gd?'+':'-'}SAR ${Math.abs(diff).toLocaleString()}</span></div></td>`;}else if(row.isProfit){const ac=row.getValue(r),tgt=Math.round(net*T.profitPct/100),diff=ac-tgt,gd=diff>=0,vc=ac>=0?'color:var(--green)':'color:var(--red)';tb+=`<td style="${vc}"><div style="font-family:'DM Mono',monospace;font-size:11px">${fn(ac)}</div><div style="color:var(--ink3);font-size:10px;margin-top:1px">${pc(ac,net)}%</div><div style="margin-top:3px"><span class="badge ${gd?'bg':'br'}" style="font-size:10px">${gd?'+':'-'}SAR ${Math.abs(diff).toLocaleString()}</span></div></td>`;}else{const ac=row.getValue(r),p=row.rt==='rn'?100:pc(ac,net),vc=row.rt==='rn'?'color:var(--green)':'';tb+=`<td style="${vc}"><div style="font-family:'DM Mono',monospace;font-size:11px">${fn(ac)}</div><div style="color:var(--ink3);font-size:10px;margin-top:1px">${p}%</div></td>`;}});tb+='</tr>';});
-  w.innerHTML=`<table class="otbl"><thead>${th}</thead><tbody>${tb}</tbody></table>`;
-}
-</script>
+    window.addEventListener('load', () => {
+        try {
+            const u = localStorage.getItem('pakka_url');
+            if (u)
+                el('api-url').value = u;
+        } catch (e) {}
+    });
+
+    async function callAPI(action, extra={}) {
+        const params = new URLSearchParams({
+            action,
+            password: PW,
+            ...extra
+        });
+        const res = await fetch(API + '?' + params.toString());
+        const txt = await res.text();
+        try {
+            return JSON.parse(txt);
+        } catch (e) {
+            throw new Error('Bad response from server.');
+        }
+    }
+
+    async function doLogin() {
+        const url = el('api-url').value.trim(),
+            pw = el('login-pw').value.trim();
+        el('lerr').textContent = '';
+        if (!url) {
+            el('lerr').textContent = 'Please paste your Apps Script URL.';
+            return;
+        }
+        if (!pw) {
+            el('lerr').textContent = 'Please enter your password.';
+            return;
+        }
+        const btn = el('lbtn');
+        btn.disabled = true;
+        btn.textContent = 'Signing in…';
+        API = url;
+        PW = pw;
+        try {
+            const res = await callAPI('login');
+            if (!res.ok) {
+                el('lerr').textContent = res.error || 'Invalid password.';
+                btn.disabled = false;
+                btn.textContent = 'Sign in';
+                API = null;
+                PW = null;
+                return;
+            }
+            ROLE = res.role;
+            try {
+                localStorage.setItem('pakka_url', url);
+            } catch (e) {}
+            startApp();
+        } catch (err) {
+            el('lerr').textContent = err.message;
+            btn.disabled = false;
+            btn.textContent = 'Sign in';
+            API = null;
+            PW = null;
+        }
+    }
+    function logout() {
+        ROLE = null;
+        PW = null;
+        API = null;
+        el('login-screen').style.display = 'flex';
+        el('main-app').style.display = 'none';
+        el('login-pw').value = '';
+        el('lerr').textContent = '';
+        el('lbtn').disabled = false;
+        el('lbtn').textContent = 'Sign in';
+    }
+
+    async function startApp() {
+        el('login-screen').style.display = 'none';
+        el('main-app').style.display = 'block';
+        const labels = {
+            management: '🔧 Management',
+            finance: '💰 Finance',
+            operations: '👁 Operations'
+        };
+        el('rbadge').textContent = labels[ROLE] || ROLE;
+        buildMgmtRows();
+        buildFinRows();
+        applyPerms();
+        el('f-month').value = String(new Date().getMonth() + 1).padStart(2, '0');
+        await loadAll();
+        setTimeout(buildDonut, 200);
+    }
+    function applyPerms() {
+        el('ro-banner').style.display = isMgmt() ? 'none' : 'flex';
+        el('save-row').style.display = isMgmt() ? 'flex' : 'none';
+        setTimeout(() => {
+            ['m-name', 'm-gross', 'm-p-gross', 'm-p-vat'].forEach(id => {
+                const e = el(id);
+                if (e)
+                    e.disabled = !isMgmt();
+            });
+            CD.forEach(d => {
+                const e = el('m-p-' + d.id);
+                if (e)
+                    e.disabled = !isMgmt();
+            });
+        }, 100);
+        el('f-save-btn').disabled = !isFin();
+    }
+    function setSyncDot(ok) {
+        const d = el('sdot');
+        if (d)
+            d.className = 'sdot' + (ok ? '' : ' off');
+    }
+    function setSyncTime() {
+        const ts = new Date().toLocaleTimeString('en-GB', {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit'
+        });
+        ['s-mgmt', 's-fin', 's-ops'].forEach(id => {
+            const e = el(id);
+            if (e)
+                e.textContent = 'Last synced: ' + ts;
+        });
+    }
+
+    async function loadAll() {
+        setSyncDot(true);
+        try {
+            const res = await callAPI('getAll');
+            if (!res.ok) {
+                setSyncDot(false);
+                return;
+            }
+            if (res.data.targets)
+                T = res.data.targets;
+            recs = res.data.records || [];
+            setSyncTime();
+            el('m-name').value = T.name || '';
+            el('m-gross').value = T.grossTarget || '';
+            el('m-p-gross').value = T.pGross || 120;
+            el('m-p-vat').value = T.pVat || 20;
+            CD.forEach(d => {
+                const e = el('m-p-' + d.id);
+                if (e)
+                    e.value = T[d.tKey] || 0;
+            });
+            applyPerms();
+            ml();
+            renderHist();
+            renderOps();
+            if (recs.length) {
+                el('tab-finance').classList.add('has-data');
+                el('tab-ops').classList.add('has-data');
+                if (!selKey)
+                    selKey = recs[recs.length - 1].key;
+            }
+            setSyncDot(true);
+        } catch (err) {
+            setSyncDot(false);
+        }
+    }
+    function sw(name, btn) {
+        ['mgmt', 'finance', 'ops'].forEach(t => {
+            el('view-' + t).style.display = t === name ? 'block' : 'none';
+        });
+        document.querySelectorAll('.ntab').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        if (name === 'ops') {
+            renderOps();
+            setTimeout(buildOpsCharts, 150);
+        }
+        if (name === 'mgmt')
+            setTimeout(buildDonut, 150);
+    }
+    function swOps(name, btn) {
+        el('ops-monthly').style.display = name === 'monthly' ? 'block' : 'none';
+        el('ops-allmonths').style.display = name === 'allmonths' ? 'block' : 'none';
+        document.querySelectorAll('.stab').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        if (name === 'allmonths')
+            renderAll();
+    }
+
+    function buildMgmtRows() {
+        el('m-cost-rows').innerHTML = CD.map(d => `<div class="mr"><div><div class="ml">${d.label}</div><div class="ms">${d.sub}</div></div><div><input class="inp inpr" id="m-p-${d.id}" type="number" value="${T[d.tKey] || 0}" style="width:84px" oninput="ml()"></div><div class="mono" id="m-s-${d.id}">—</div><div style="text-align:right"><span class="tag ${d.ref === 'pct' ? 'tp' : 'ts'}">${d.ref === 'pct' ? '% ref' : 'SAR ref'}</span></div></div>`).join('');
+    }
+    function ml() {
+        const gT = vv('m-gross'),
+            pG = vv('m-p-gross') || 120,
+            pV = vv('m-p-vat') || 20,
+            nS = gT > 0 ? gT * (100 / pG) : 0;
+        el('m-s-gross').textContent = gT > 0 ? fn(gT) : '—';
+        el('m-s-vat').textContent = gT > 0 ? fn(gT * (pV / pG)) : '—';
+        el('m-s-net').textContent = gT > 0 ? fn(nS) : '—';
+        let tot = 0;
+        CD.forEach(d => {
+            const p = vv('m-p-' + d.id);
+            tot += p;
+            el('m-s-' + d.id).textContent = (gT > 0 && p > 0) ? fn(nS * p / 100) : '—';
+        });
+        const pr = Math.round((100 - tot) * 10) / 10;
+        el('m-pp').textContent = pr + '%';
+        el('m-pp').style.color = pr >= 0 ? 'var(--green)' : 'var(--red)';
+        el('m-ps').textContent = gT > 0 ? fs(nS * pr / 100) : '—';
+        el('m-ps').style.color = pr >= 0 ? 'var(--green)' : 'var(--red)';
+        const b = el('m-badge');
+        if (Math.abs(pr - 20) < 0.5) {
+            b.textContent = 'Balanced at 20%';
+            b.className = 'badge bg';
+        } else if (pr < 0) {
+            b.textContent = 'Over 100%';
+            b.className = 'badge br';
+        } else if (pr < 10) {
+            b.textContent = pr + '% profit';
+            b.className = 'badge bo';
+        } else {
+            b.textContent = pr + '% profit';
+            b.className = 'badge bgold';
+        }
+        el('m-prog').style.width = Math.min(100, Math.abs(pr) * 2) + '%';
+        el('m-prog').style.background = pr >= 0 ? 'var(--green)' : 'var(--red)';
+        el('m-prev').textContent = pr >= 0 ? 'Net profit: ' + pr + '% of net sales' : 'Warning: costs exceed 100%';
+        buildWf(pr, nS);
+        buildDonut();
+    }
+    function buildWf(pp, nS) {
+        const items = [{
+            label: 'Net sales',
+            p: 100,
+            c: '#00664C'
+        }, ...CD.map(d => ({
+            label: d.label.split(',')[0],
+            p: vv('m-p-' + d.id),
+            c: d.color
+        })), {
+            label: 'Net profit',
+            p: Math.max(0, pp),
+            c: pp >= 0 ? '#005240' : '#b83232'
+        }];
+        el('m-wf').innerHTML = items.map(it => `<div class="wfr"><div class="wfl">${it.label}</div><div class="wft"><div class="wff" style="width:${Math.min(100, it.p)}%;background:${it.c};color:#fff">${it.p > 12 ? it.p + '%' : ''}</div></div><div class="wfp">${it.p <= 12 ? it.p + '%' : ''}</div></div>`).join('');
+    }
+    function buildDonut() {
+        const data = CD.map(d => vv('m-p-' + d.id)),
+            labels = CD.map(d => d.label.split(',')[0]),
+            colors = CD.map(d => d.color);
+        const pr = Math.round((100 - data.reduce((a, b) => a + b, 0)) * 10) / 10;
+        if (pr > 0) {
+            data.push(pr);
+            labels.push('Net profit');
+            colors.push('#2d9e6b');
+        }
+        if (donutCh)
+            donutCh.destroy();
+        const ctx = el('c-donut');
+        if (!ctx)
+            return;
+        donutCh = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels,
+                datasets: [{
+                    data,
+                    backgroundColor: colors,
+                    borderWidth: 2,
+                    borderColor: '#FFFDF8'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: c => c.label + ': ' + c.parsed + '%'
+                        }
+                    }
+                },
+                cutout: '62%'
+            }
+        });
+        el('c-legend').innerHTML = labels.map((l, i) => `<span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:2px;background:${colors[i]};display:inline-block"></span>${l} ${data[i]}%</span>`).join('');
+    }
+    async function saveTgts() {
+        if (!isMgmt())
+            return;
+        T.name = el('m-name').value || T.name;
+        T.grossTarget = vv('m-gross') || T.grossTarget;
+        T.pGross = vv('m-p-gross') || T.pGross;
+        T.pVat = vv('m-p-vat') || T.pVat;
+        CD.forEach(d => {
+            T[d.tKey] = vv('m-p-' + d.id) || T[d.tKey];
+        });
+        T.profitPct = Math.round((100 - CD.reduce((s, d) => s + T[d.tKey], 0)) * 10) / 10;
+        const btn = el('m-save-btn');
+        btn.disabled = true;
+        btn.textContent = 'Saving…';
+        try {
+            const res = await callAPI('saveTargets', {
+                payload: JSON.stringify(T)
+            });
+            if (res.ok) {
+                el('m-ok').style.display = 'inline';
+                el('tab-mgmt').classList.add('has-data');
+                setTimeout(() => el('m-ok').style.display = 'none', 3000);
+            } else
+                alert('Save failed: ' + res.error);
+        } catch (e) {
+            alert(e.message);
+        }
+        btn.disabled = false;
+        btn.textContent = 'Save targets to Google Sheet';
+    }
+
+    // FINANCE
+    function buildFinRows() {
+        // FIX 1: all cost inputs use type=text to allow comma input
+        el('f-cost-rows').innerHTML = CD.map(d => `<div class="fr"><div><div class="ml">${d.label}</div><div class="ms">${d.sub}</div></div><input class="inp inpr" id="f-${d.id}" type="text" placeholder="0" oninput="fl()"><div class="mono" id="fd-${d.id}">—</div></div>`).join('');
+    }
+    function fl() {
+        const g = vv('f-gross'),
+            va = vv('f-vat'),
+            n = g - va;
+        el('fd-gross').textContent = n > 0 ? pc(g, n) + '%' : '—';
+        el('fd-vat').textContent = n > 0 ? pc(va, n) + '%' : '—';
+        el('fd-net').textContent = n > 0 ? fn(n) : '—';
+        let tc = 0;
+        CD.forEach(d => {
+            const val = vv('f-' + d.id);
+            tc += val;
+            el('fd-' + d.id).textContent = (n > 0 && val > 0) ? pc(val, n) + '%' : '—';
+        });
+        el('fd-tc').textContent = tc > 0 ? fn(tc) : '—';
+        el('fd-tcp').textContent = (n > 0 && tc > 0) ? pc(tc, n) + '%' : '—';
+        const pr = n - tc,
+            pp = n > 0 ? pc(pr, n) : 0,
+            gd = pr >= 0;
+        el('f-pval').textContent = n > 0 ? fs(pr) : '—';
+        el('f-pval').style.color = gd ? 'var(--green)' : 'var(--red)';
+        el('f-ppct').textContent = n > 0 ? pp + '% margin' : '';
+        el('f-ppct').style.color = gd ? 'var(--green)' : 'var(--red)';
+        el('f-pbar').style.width = n > 0 ? Math.min(100, Math.abs(pp) * 2) + '%' : '0%';
+        el('f-pbar').style.background = gd ? 'var(--green)' : 'var(--red)';
+        const df = Math.round((pp - T.profitPct) * 10) / 10;
+        if (n > 0) {
+            el('f-badges').innerHTML = `<span class="badge ${df >= 0 ? 'bg' : 'br'}">${df >= 0 ? '+' : '-'}${Math.abs(df)}% vs target</span><span class="badge ${pp >= 20 ? 'bg' : pp >= 10 ? 'bgold' : 'br'}">${pp}% margin</span>`;
+            el('f-live').innerHTML = `${ML[parseInt(el('f-month').value) - 1]} ${el('f-year').value} | Net: <strong style="color:var(--green)">${fn(n)}</strong> | P/L: <strong style="color:${gd ? 'var(--green)' : 'var(--red)'}">${fs(pr)}</strong>`;
+            const bars = CD.map(d => {
+                const ac = vv('f-' + d.id),
+                    tgt = getTgtSAR(d, n),
+                    diff = tgt - ac,
+                    good = diff >= 0;
+                return `<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px"><div style="font-size:12px;color:var(--ink3);width:100px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${d.label.split(',')[0]}</div><div style="flex:1;height:6px;background:var(--beige3);border-radius:3px;overflow:hidden"><div style="height:100%;width:${Math.min(100, tgt > 0 ? Math.round(ac / tgt * 100) : 0)}%;background:${good ? '#00664C' : '#b83232'};border-radius:3px"></div></div><span class="badge ${good ? 'bg' : 'br'}" style="font-size:9px;padding:2px 6px">${good ? '+' : '-'}SAR ${Math.abs(diff).toLocaleString()}</span></div>`;
+            }).join('');
+            el('f-vtgt').innerHTML = `<div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink4);margin-bottom:8px">Live cost performance vs targets</div>${bars}`;
+        } else {
+            el('f-badges').innerHTML = '';
+            el('f-live').innerHTML = 'Enter figures to see live P&L';
+            el('f-vtgt').innerHTML = '';
+        }
+    }
+
+    async function saveMonth() {
+        if (!isFin())
+            return;
+        const mo = el('f-month').value,
+            yr = el('f-year').value,
+            g = vv('f-gross'),
+            va = vv('f-vat');
+        if (!g) {
+            alert('Please enter gross sales.');
+            return;
+        }
+        const n = g - va;
+        let tc = 0;
+        const co = {};
+        CD.forEach(d => {
+            co[d.id] = vv('f-' + d.id);
+            tc += co[d.id];
+        });
+        const pr = n - tc,
+            pp = n > 0 ? pc(pr, n) : 0;
+
+        // FIX 3: always use upsert — key = year-month, always overwrites
+        const key = yr + '-' + mo;
+        const rec = {
+            key,
+            month: mo,
+            year: yr,
+            label: ML[parseInt(mo) - 1] + ' ' + yr,
+            gross: g,
+            vat: va,
+            net: n,
+            ...co,
+            totalCost: tc,
+            profit: pr,
+            profitPct: pp,
+            notes: el('f-notes').value
+        };
+
+        const btn = el('f-save-btn');
+        btn.disabled = true;
+        btn.textContent = 'Saving…';
+        try {
+            const res = await callAPI('saveRecord', {
+                payload: JSON.stringify(rec)
+            });
+            if (res.ok) {
+                // FIX 3: always replace local copy too
+                const idx = recs.findIndex(r => r.key === key);
+                if (idx >= 0)
+                    recs[idx] = rec;
+                else
+                    recs.push(rec);
+                recs.sort((a, b) => a.key.localeCompare(b.key));
+                renderHist();
+                el('tab-finance').classList.add('has-data');
+                el('tab-ops').classList.add('has-data');
+                el('f-ok').style.display = 'inline';
+                setTimeout(() => el('f-ok').style.display = 'none', 3000);
+            } else
+                alert('Save failed: ' + res.error);
+        } catch (e) {
+            alert(e.message);
+        }
+        btn.disabled = false;
+        btn.textContent = 'Save to Google Sheet';
+    }
+
+    function clearFin() {
+        ['f-gross', 'f-vat'].forEach(id => el(id).value = '');
+        CD.forEach(d => el('f-' + d.id).value = '');
+        el('f-notes').value = '';
+        fl();
+    }
+
+    // FIX 2: delete also refreshes from server to confirm deletion
+    async function delRec(key) {
+        if (!isFin())
+            return;
+        const r = recs.find(x => x.key === key);
+        if (!r || !confirm(`Delete ${r.label}? Cannot be undone.`))
+            return;
+        try {
+            const res = await callAPI('deleteRecord', {
+                payload: JSON.stringify({
+                    key
+                })
+            });
+            if (res.ok) {
+                recs = recs.filter(x => x.key !== key);
+                if (selKey === key)
+                    selKey = recs.length ? recs[recs.length - 1].key : null;
+                renderHist();
+                // FIX 2: re-fetch from server to confirm
+                await loadAll();
+            } else
+                alert('Delete failed: ' + res.error);
+        } catch (e) {
+            alert(e.message);
+        }
+    }
+
+    function renderHist() {
+        const w = el('f-hist');
+        if (!recs.length) {
+            w.innerHTML = '<div style="font-size:13px;color:var(--ink3);padding:8px 0">No records yet.</div>';
+            return;
+        }
+        w.innerHTML = `<table class="htbl"><thead><tr><th>Month</th><th class="r">Gross</th><th class="r">Net</th><th class="r">Net P/L</th><th class="r">Margin</th><th class="r">Actions</th></tr></thead><tbody>
+  ${recs.map(r => `<tr><td><strong style="font-size:14px">${r.label}</strong>${r.notes ? `<div style="font-size:11px;color:var(--ink3);margin-top:2px">${r.notes.substring(0, 50)}</div>` : ''}</td><td class="r" style="font-family:'DM Mono',monospace;font-size:13px">${fn(r.gross)}</td><td class="r" style="font-family:'DM Mono',monospace;font-size:13px">${fn(r.net)}</td><td class="r"><span class="badge ${r.profit >= 0 ? 'bg' : 'br'}">${r.profit >= 0 ? '+' : '-'}${fn(r.profit)}</span></td><td class="r"><span class="badge ${r.profitPct >= 20 ? 'bg' : r.profitPct >= 10 ? 'bgold' : 'br'}">${r.profitPct}%</span></td><td class="r" style="white-space:nowrap">${isFin() ? `<button class="btn btnsm btno" onclick="loadRec('${r.key}')">Edit</button><button class="btn btnsm btndel" onclick="delRec('${r.key}')">Delete</button>` : `<span style="font-size:11px;color:var(--ink4)">View only</span>`}</td></tr>`).join('')}
+  </tbody></table>`
+        ;
+    }
+    function loadRec(key) {
+        const r = recs.find(x => x.key === key);
+        if (!r)
+            return;
+        el('f-month').value = r.month;
+        el('f-year').value = r.year;
+        el('f-gross').value = r.gross || '';
+        el('f-vat').value = r.vat || '';
+        CD.forEach(d => el('f-' + d.id).value = r[d.id] || '');
+        el('f-notes').value = r.notes || '';
+        fl();
+    }
+    function expCSV() {
+        if (!recs.length) {
+            alert('No records.');
+            return;
+        }
+        const h = ['Month', 'Year', 'Gross', 'VAT', 'Net', 'COGS', 'Rent', 'Labor', 'Maint', 'Mktg', 'Dep', 'Shared', 'Total', 'P/L', 'Margin%', 'Notes'];
+        const rows = recs.map(r => [r.label.split(' ')[0], r.year, r.gross, r.vat, r.net, r.cogs, r.rent, r.labor, r.maint, r.mktg, r.dep, r.shared, r.totalCost, r.profit, r.profitPct, '"' + (r.notes || '') + '"']);
+        const csv = [h.join(','), ...rows.map(r => r.join(','))].join('\n');
+        const a = document.createElement('a');
+        a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+        a.download = 'pakka.csv';
+        a.click();
+    }
+
+    // OPS
+    function renderOps() {
+        renderWallet();
+        renderWalletBreakdown();
+        renderPills();
+        if (selKey)
+            renderDetail();
+    }
+
+    function renderWallet() {
+        const w = el('ops-wallet');
+        if (!recs.length) {
+            w.innerHTML = '<div style="font-size:13px;color:var(--ink3);padding:10px 0;grid-column:1/-1">No data yet.</div>';
+            return;
+        }
+        const tP = recs.reduce((s, r) => s + r.profit, 0),
+            tD = recs.reduce((s, r) => s + r.dep, 0),
+            tN = recs.reduce((s, r) => s + r.net, 0),
+            tG = recs.reduce((s, r) => s + r.gross, 0);
+        const wa = recs.reduce((s, r) => s + costWallet(r), 0);
+        const n = recs.length,
+            am = tN > 0 ? Math.round(tP / tN * 1000) / 10 : 0;
+        w.innerHTML = `
+    <div class="wc ${tP >= 0 ? 'wg' : 'wr'}"><div class="wl">Accumulated profit</div><div class="wv">${fs(tP)}</div><div class="ws">${n} months · avg ${am}% margin</div></div>
+    <div class="wc wb"><div class="wl">Total depreciation</div><div class="wv">${fn(tD)}</div><div class="ws">Asset recovery reserve</div></div>
+    <div class="wc ${wa >= 0 ? 'wg' : 'wr'}"><div class="wl">Cost performance wallet</div><div class="wv">${wa >= 0 ? '+' : '-'}SAR ${Math.abs(wa).toLocaleString()}</div><div class="ws">${wa >= 0 ? 'Saved on costs vs targets' : 'Overspent on costs'} · ${n} mo.</div></div>
+    <div class="wc wgold"><div class="wl">Total net sales</div><div class="wv">${fn(tN)}</div><div class="ws">From ${fn(tG)} gross</div></div>`;
+    }
+
+    // SUGGESTION: cost performance wallet breakdown table
+    function renderWalletBreakdown() {
+        const bd = el('wallet-breakdown'),
+            wrap = el('wb-wrap');
+        if (!recs.length) {
+            bd.style.display = 'none';
+            return;
+        }
+        bd.style.display = 'block';
+
+        // Build table: rows = cost items, columns = months + total
+        // Header
+        let th = `<tr><th class="lh">Cost item</th>`;
+        recs.forEach(r => {
+            th += `<th class="r" style="min-width:130px">${r.label.replace(' 20', "'")}</th>`;
+        });
+        th += `<th class="r" style="min-width:120px;background:var(--beige3)">Total</th></tr>`;
+
+        // Cost rows
+        let tb = '';
+        const colTotals = recs.map(() => 0);
+        let grandTotal = 0;
+
+        CD.forEach(d => {
+            let rowTotal = 0;
+            let cols = '';
+            recs.forEach((r, i) => {
+                const ac = r[d.id],
+                    tgt = getTgtSAR(d, r.net),
+                    diff = Math.round(tgt - ac);
+                const good = diff >= 0;
+                colTotals[i] += diff;
+                rowTotal += diff;
+                cols += `<td class="r"><div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--ink3)">${fn(ac)}</div><div style="margin-top:3px"><span class="badge ${good ? 'bg' : 'br'}" style="font-size:10px;padding:2px 7px">${good ? '+' : '-'}SAR ${Math.abs(diff).toLocaleString()}</span></div></td>`;
+            });
+            const rowGood = rowTotal >= 0;
+            grandTotal += rowTotal;
+            tb += `<tr>
+      <td class="lc" style="font-family:'Cairo',sans-serif">
+        <div style="font-size:13px;font-weight:600">${
+            d.label}</div>
+        <div style="font-size:10px;color:var(--ink3)">${d.sub}</div>
+      </td>
+      ${
+            cols}
+      <td class="r" style="background:var(--beige2)">
+        <span class="badge ${
+            rowGood ? 'bg' : 'br'}" style="font-size:11px">${rowGood ? '+' : '-'}SAR ${Math.abs(rowTotal).toLocaleString()}</span>
+      </td>
+    </tr>`
+
+            ;
+        });
+
+        // Monthly total row
+        let totalCols = '';
+        colTotals.forEach((t, i) => {
+            const good = t >= 0;
+            totalCols += `<td class="r" style="background:var(--beige2)"><span class="badge ${good ? 'bg' : 'br'}">${good ? '+' : '-'}SAR ${Math.abs(t).toLocaleString()}</span></td>`;
+        });
+        const grandGood = grandTotal >= 0;
+        tb += `<tr class="wbtot">
+    <td class="lc" style="font-family:'Cairo',sans-serif;font-size:13px;font-weight:800">Monthly total</td>
+    ${
+        totalCols}
+    <td class="r" style="background:var(--beige3)"><span class="badge ${grandGood ? 'bg' : 'br'}" style="font-size:12px">${grandGood ? '+' : '-'}SAR ${Math.abs(grandTotal).toLocaleString()}</span></td>
+  </tr>`
+        ;
+
+        wrap.innerHTML = `<table class="wbtbl otbl"><thead>${th}</thead><tbody>${tb}</tbody></table>`;
+    }
+
+    function buildOpsCharts() {
+        if (!recs.length)
+            return;
+        if (profCh)
+            profCh.destroy();
+        const ctx1 = el('c-profit');
+        if (!ctx1)
+            return;
+        profCh = new Chart(ctx1, {
+            type: 'bar',
+            data: {
+                labels: recs.map(r => r.label.replace(' 20', "'")),
+                datasets: [{
+                    label: 'Net P/L',
+                    data: recs.map(r => Math.round(r.profit)),
+                    backgroundColor: recs.map(r => r.profit >= 0 ? '#00664C' : '#b83232'),
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: c => fs(c.parsed.y)
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        ticks: {
+                            callback: v => 'SAR ' + (Math.abs(v) / 1000).toFixed(0) + 'k',
+                            font: {
+                                size: 10
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(0,0,0,.05)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            font: {
+                                size: 10
+                            },
+                            autoSkip: false
+                        },
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+        if (costCh)
+            costCh.destroy();
+        const ctx2 = el('c-cost');
+        if (!ctx2)
+            return;
+        const lr = recs[recs.length - 1],
+            net = lr.net;
+        costCh = new Chart(ctx2, {
+            type: 'bar',
+            data: {
+                labels: CD.map(d => d.label.split(',')[0]),
+                datasets: [{
+                    label: 'Actual %',
+                    data: CD.map(d => Math.round(lr[d.id] / net * 100 * 10) / 10),
+                    backgroundColor: '#F37829',
+                    borderRadius: 3
+                }, {
+                    label: 'Target %',
+                    data: CD.map(d => T[d.tKey]),
+                    backgroundColor: 'rgba(0,102,76,.28)',
+                    borderRadius: 3,
+                    borderWidth: 1,
+                    borderColor: '#00664C'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: c => c.dataset.label + ': ' + c.parsed.y + '%'
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        ticks: {
+                            font: {
+                                size: 9
+                            },
+                            maxRotation: 40,
+                            autoSkip: false
+                        },
+                        grid: {
+                            display: false
+                        }
+                    },
+                    y: {
+                        ticks: {
+                            callback: v => v + '%',
+                            font: {
+                                size: 10
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(0,0,0,.05)'
+                        }
+                    }
+                }
+            }
+        });
+    }
+    function renderPills() {
+        const w = el('ops-pills');
+        if (!recs.length) {
+            w.innerHTML = '<div style="font-size:13px;color:var(--ink3)">No records yet.</div>';
+            return;
+        }
+        w.innerHTML = recs.map(r => `<button class="mpill${r.key === selKey ? ' active' : ''}" onclick="selMo('${r.key}')">${r.label}</button>`).join('');
+    }
+    function selMo(key) {
+        selKey = key;
+        renderPills();
+        renderDetail();
+    }
+    function renderDetail() {
+        const r = recs.find(x => x.key === selKey);
+        if (!r) {
+            el('ops-plc').style.display = 'none';
+            el('ops-kpi').innerHTML = '';
+            return;
+        }
+        el('ops-plc').style.display = 'block';
+        el('ops-mtitle').textContent = r.label;
+        const net = r.net,
+            pg = r.profit >= 0;
+        el('ops-kpi').innerHTML = `<div class="kpi"><div class="kl">Gross sales</div><div class="kv">${fn(r.gross)}</div><div class="ks">${pc(r.net, r.gross)}% net ratio</div></div><div class="kpi"><div class="kl">Net sales</div><div class="kv">${fn(net)}</div><div class="ks">After deductions</div></div><div class="kpi"><div class="kl">Total costs</div><div class="kv">${fn(r.totalCost)}</div><div class="ks">${pc(r.totalCost, net)}% of net</div></div><div class="kpi"><div class="kl">Net profit / loss</div><div class="kv" style="color:${pg ? 'var(--green)' : 'var(--red)'}">${fs(r.profit)}</div><div class="ks" style="color:${pg ? 'var(--green)' : 'var(--red)'}">${r.profitPct}% margin</div></div>`;
+        const rows = [{
+            label: 'Gross sales',
+            sub: 'Top-line',
+            sar: r.gross,
+            p: pc(r.gross, net),
+            tgtSAR: null
+        }, {
+            label: 'VAT + discounts',
+            sub: 'Deductions',
+            sar: r.vat,
+            p: pc(r.vat, net),
+            tgtSAR: null,
+            indent: true
+        }, {
+            label: 'Total net sales',
+            sub: 'Base = 100%',
+            sar: net,
+            p: 100,
+            tgtSAR: null,
+            rt: 'rn'
+        }, ...CD.map(d => ({
+            label: d.label,
+            sub: d.sub,
+            sar: r[d.id],
+            p: pc(r[d.id], net),
+            tgtSAR: getTgtSAR(d, net),
+            refType: d.ref,
+            perf: perfCost(r[d.id], getTgtSAR(d, net))
+        })), {
+            label: 'Total costs',
+            sub: '',
+            sar: r.totalCost,
+            p: pc(r.totalCost, net),
+            tgtSAR: null,
+            rt: 'rt'
+        }, {
+            label: 'Net profit / loss',
+            sub: '',
+            sar: r.profit,
+            p: r.profitPct,
+            tgtSAR: Math.round(net * T.profitPct / 100),
+            isProfit: true,
+            rt: 'rp',
+            perf: perfProfit(r.profit, Math.round(net * T.profitPct / 100))
+        }];
+        el('ops-plbody').innerHTML = rows.map(row => {
+            const sc = row.isProfit ? (row.sar >= 0 ? 'color:var(--green)' : 'color:var(--red)') : '';
+            const tgtD = row.tgtSAR == null ? '—' : fn(row.tgtSAR);
+            const rtTag = row.refType ? `<span class="tag ${row.refType === 'pct' ? 'tp' : 'ts'}">${row.refType === 'pct' ? '% of net' : 'Fixed SAR'}</span>` : (row.isProfit ? `<span class="tag tp">% of net</span>` : '');
+            return `<tr class="${row.rt || ''}"><td${row.indent ? ' class="indent"' : ''}><div style="font-size:13px${row.indent ? ';color:var(--ink3)' : ''}">${row.label}</div>${row.sub ? `<div style="font-size:11px;color:var(--ink3)">${row.sub}</div>` : ''}</td><td class="r" style="${sc};font-family:'DM Mono',monospace;font-size:13px">${fs(row.sar)}</td><td class="r" style="font-family:'DM Mono',monospace;font-size:12px;color:var(--ink3)">${row.p}%</td><td class="r" style="font-family:'DM Mono',monospace;font-size:12px;color:var(--ink2)">${tgtD}</td><td class="r">${rtTag}</td><td class="r">${row.perf || '—'}</td></tr>`;
+        }).join('');
+    }
+    function renderAll() {
+        const w = el('ops-tbl'),
+            ce = el('ops-cnt');
+        if (!recs.length) {
+            w.innerHTML = '<div style="padding:40px;text-align:center;font-size:13px;color:var(--ink3)">No records yet.</div>';
+            ce.textContent = 'No records';
+            return;
+        }
+        ce.textContent = recs.length + ' month' + (recs.length > 1 ? 's' : '') + ' recorded';
+        const rDefs = [{
+            key: 'gross',
+            label: 'Gross sales',
+            sub: 'Top-line',
+            getValue: r => r.gross,
+            getTgt: null
+        }, {
+            key: 'vat',
+            label: 'VAT + discounts',
+            sub: 'Deductions',
+            getValue: r => r.vat,
+            getTgt: null,
+            indent: true
+        }, {
+            key: '_net',
+            label: 'Total net sales',
+            sub: 'Base = 100%',
+            getValue: r => r.net,
+            getTgt: null,
+            rt: 'rn'
+        }, ...CD.map(d => ({
+            key: d.id,
+            label: d.label,
+            sub: d.sub,
+            getValue: r => r[d.id],
+            d,
+            rt: ''
+        })), {
+            key: '_tc',
+            label: 'Total costs',
+            sub: '',
+            getValue: r => r.totalCost,
+            getTgt: null,
+            rt: 'rt'
+        }, {
+            key: '_profit',
+            label: 'Net profit / loss',
+            sub: '',
+            getValue: r => r.profit,
+            isProfit: true,
+            rt: 'rp'
+        }, {
+            key: '_perf',
+            label: 'Cost performance',
+            sub: 'cost savings vs targets',
+            isPerf: true,
+            rt: 'rperf'
+        }];
+        let th = `<tr><th class="lh">Line item</th>`;
+        recs.forEach(r => {
+            th += `<th style="min-width:140px">${r.label.replace(' 20', "'")}</th>`;
+        });
+        th += `</tr>`;
+        let tb = '';
+        rDefs.forEach(row => {
+            tb += `<tr class="${row.rt || ''}"><td class="lc${row.indent ? ' indent' : ''}">${row.label}<div style="font-size:10px;color:var(--ink3)">${row.sub || ''}</div></td>`;
+            recs.forEach(r => {
+                const net = r.net;
+                if (row.isPerf) {
+                    const wa = costWallet(r),
+                        gd = wa >= 0;
+                    tb += `<td><span class="badge ${gd ? 'bg' : 'br'}">${gd ? '+' : '-'}SAR ${Math.abs(wa).toLocaleString()}</span></td>`;
+                } else if (row.d) {
+                    const ac = row.getValue(r),
+                        p = pc(ac, net),
+                        tgt = getTgtSAR(row.d, net),
+                        diff = tgt - ac,
+                        gd = diff >= 0;
+                    tb += `<td><div style="font-family:'DM Mono',monospace;font-size:11px">${fn(ac)}</div><div style="color:var(--ink3);font-size:10px;margin-top:1px">${p}%</div><div style="margin-top:3px"><span class="badge ${gd ? 'bg' : 'br'}" style="font-size:10px">${gd ? '+' : '-'}SAR ${Math.abs(diff).toLocaleString()}</span></div></td>`;
+                } else if (row.isProfit) {
+                    const ac = row.getValue(r),
+                        tgt = Math.round(net * T.profitPct / 100),
+                        diff = ac - tgt,
+                        gd = diff >= 0,
+                        vc = ac >= 0 ? 'color:var(--green)' : 'color:var(--red)';
+                    tb += `<td style="${vc}"><div style="font-family:'DM Mono',monospace;font-size:11px">${fn(ac)}</div><div style="color:var(--ink3);font-size:10px;margin-top:1px">${pc(ac, net)}%</div><div style="margin-top:3px"><span class="badge ${gd ? 'bg' : 'br'}" style="font-size:10px">${gd ? '+' : '-'}SAR ${Math.abs(diff).toLocaleString()}</span></div></td>`;
+                } else {
+                    const ac = row.getValue(r),
+                        p = row.rt === 'rn' ? 100 : pc(ac, net),
+                        vc = row.rt === 'rn' ? 'color:var(--green)' : '';
+                    tb += `<td style="${vc}"><div style="font-family:'DM Mono',monospace;font-size:11px">${fn(ac)}</div><div style="color:var(--ink3);font-size:10px;margin-top:1px">${p}%</div></td>`;
+                }
+            });
+            tb += '</tr>';
+        });
+        w.innerHTML = `<table class="otbl"><thead>${th}</thead><tbody>${tb}</tbody></table>`;
+    }
+    </script>
 </body>
 </html>
